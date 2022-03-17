@@ -6,6 +6,7 @@ import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.services.PersonService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,17 +17,24 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void savePerson(Person person) {
+        person.setId(null);
         personRepository.save(person);
     }
 
     @Override
-    public void deletePerson(Person person) {
-        personRepository.delete(person);
+    public void deletePerson(Long id) {
+        Optional<Person> optionalPerson = personRepository.findById(id);
+        if(optionalPerson.isPresent()) {
+            personRepository.delete(optionalPerson.get());
+        }
+        else {
+            throw new RuntimeException("Nie można znaleźć człowieka");
+        }
     }
 
     @Override
     public void updatePerson(Long id, Person person) {
-        Optional<Person> optionalPerson= personRepository.findById(id);
+        Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isPresent()) {
             personRepository.save(optionalPerson.get().updatePerson(person));
         }
@@ -46,6 +54,21 @@ public class PersonServiceImpl implements PersonService {
         else {
             throw new RuntimeException("Nie można znaleźć człowieka");
         }
+    }
+
+    @Override
+    public List<Person> getAllPersons() {
+        return (List<Person>) personRepository.findAll();
+    }
+
+    @Override
+    public List<Person> getPersonWithNameEqualsRafal() {
+        return personRepository.getPersonWithNameEqualsRafal();
+    }
+
+    @Override
+    public List<Person> getPersonWithNameEquals(String name) {
+        return personRepository.getPersonWithNameEquals(name);
     }
 
 }

@@ -1,4 +1,4 @@
 package pl.portalstrzelecki.psback.repositories;
 
-public class ClubDepository {
+public class ClubRepository {
 }

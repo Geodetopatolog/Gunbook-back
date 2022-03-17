@@ -1,5 +1,6 @@
 package pl.portalstrzelecki.psback.domain.person;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @Builder
 @Entity
 public class Person {
@@ -22,29 +24,6 @@ public class Person {
 //    private List<Club> clubs;
     private String description = "";
 
-    public Person(String name, String surname, String nick, String description) {
-        this.name = name;
-        this.surname = surname;
-        this.nick = nick;
-        this.description = description;
-    }
-
-//    public Person(String name, String surname, String nick, List<Club> clubs, String description) {
-//        this.name = name;
-//        this.surname = surname;
-//        this.nick = nick;
-////        this.clubs = clubs;
-//        this.description = description;
-//    }
-
-
-    public Person(Long id, String name, String surname, String nick, String description) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.nick = nick;
-        this.description = description;
-    }
 
     public Person() {
     }
