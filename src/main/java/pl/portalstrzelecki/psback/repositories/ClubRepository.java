@@ -1,4 +1,7 @@
 package pl.portalstrzelecki.psback.repositories;
 
-public class ClubRepository {
+import org.springframework.data.repository.CrudRepository;
+import pl.portalstrzelecki.psback.domain.club.Club;
+
+public interface ClubRepository extends CrudRepository<Club, Long> {
 }

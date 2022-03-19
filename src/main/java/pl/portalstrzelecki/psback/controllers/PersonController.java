@@ -2,11 +2,13 @@ package pl.portalstrzelecki.psback.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.services.PersonService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ public class PersonController {
 
 
     @PostMapping("/person")
+    @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Person addPerson(@RequestBody Person person) {
 
         personService.savePerson(person);
@@ -28,20 +31,32 @@ public class PersonController {
     @GetMapping("/person")
     public @ResponseBody Person getPersonById(@RequestBody Person person)
     {
-        return personService.getPersonById(person.getId());
+        Optional<Person> optionalPerson = personService.getPersonById(person.getId());
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+
     }
 
     @PatchMapping("/person")
-    public @ResponseBody Person changePersonData(@RequestBody Person person) {
+    public @ResponseBody Person updatePerson(@RequestBody Person person) {
 
         personService.updatePerson(person.getId(), person);
         return person;
     }
 
     @DeleteMapping("/person")
-    public @ResponseBody String deletePerson(@RequestBody Person person) {
-        personService.deletePerson(person.getId());
-        return "usunięto";
+    public ResponseEntity<?> deletePerson(@RequestBody Person person) {
+       boolean anyPersonRemoved = personService.deletePerson(person.getId());
+
+       if (anyPersonRemoved) {
+           return ResponseEntity.ok().build();
+       }
+
+        return ResponseEntity.notFound().build();
     }
 
 

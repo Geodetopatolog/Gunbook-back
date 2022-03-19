@@ -32,6 +32,16 @@ public class Club {
 
 
     public Club() {
+    }
 
+
+    public Club updateClub(Club club) {
+        this.logoURL = club.getLogoURL();
+        this.name = club.getName();
+        this.description = club.getDescription();
+        this.sport = club.isSport();
+        this.fun = club.isFun();
+        this.cours = club.isCours();
+        return this;
     }
 }

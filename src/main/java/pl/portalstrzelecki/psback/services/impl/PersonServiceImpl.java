@@ -22,13 +22,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void deletePerson(Long id) {
+    public boolean deletePerson(Long id) {
         Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isPresent()) {
             personRepository.delete(optionalPerson.get());
+            return true;
         }
         else {
-            throw new RuntimeException("Nie można znaleźć człowieka");
+            return false;
         }
     }
 
@@ -46,14 +47,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person getPersonById(long id) {
+    public Optional<Person> getPersonById(long id) {
         Optional<Person> optionalPerson= personRepository.findById(id);
-        if(optionalPerson.isPresent()) {
-            return optionalPerson.get();
-        }
-        else {
-            throw new RuntimeException("Nie można znaleźć człowieka");
-        }
+
+            return optionalPerson;
     }
 
     @Override
