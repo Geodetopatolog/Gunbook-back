@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
@@ -31,7 +30,7 @@ public class ShootingRangeController {
     @GetMapping("/range")
     public @ResponseBody
     ShootingRange getShootingRangeById(@RequestBody ShootingRange shootingRange) {
-        Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(shootingRange.getId());
+        Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(shootingRange.getId_shootingrange());
 
         if (optionalShootingRange.isPresent()) {
             return optionalShootingRange.get();
@@ -44,12 +43,12 @@ public class ShootingRangeController {
     @PatchMapping("/range")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateShootingRange(@RequestBody ShootingRange shootingRange) {
-        shootingRangeService.updateShootingRange(shootingRange.getId(), shootingRange);
+        shootingRangeService.updateShootingRange(shootingRange.getId_shootingrange(), shootingRange);
     }
 
     @DeleteMapping("/range")
     public ResponseEntity<?> deleteShootingRange(@RequestBody ShootingRange shootingRange) {
-        boolean anyShootingRangeRemoved = shootingRangeService.deleteShootingRange(shootingRange.getId());
+        boolean anyShootingRangeRemoved = shootingRangeService.deleteShootingRange(shootingRange.getId_shootingrange());
 
         if (anyShootingRangeRemoved) {
             return ResponseEntity.ok().build();

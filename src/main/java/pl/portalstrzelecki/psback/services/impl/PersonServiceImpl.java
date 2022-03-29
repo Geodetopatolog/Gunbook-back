@@ -2,6 +2,7 @@ package pl.portalstrzelecki.psback.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.services.PersonService;
@@ -17,7 +18,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void savePerson(Person person) {
-        person.setId(null);
+        person.setId_person(null);
         personRepository.save(person);
     }
 
@@ -48,7 +49,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Optional<Person> getPersonById(long id) {
-        Optional<Person> optionalPerson= personRepository.findById(id);
+        Optional<Person> optionalPerson = personRepository.findById(id);
 
             return optionalPerson;
     }

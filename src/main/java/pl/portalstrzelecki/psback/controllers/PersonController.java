@@ -31,7 +31,7 @@ public class PersonController {
     @GetMapping("/person")
     public @ResponseBody Person getPersonById(@RequestBody Person person)
     {
-        Optional<Person> optionalPerson = personService.getPersonById(person.getId());
+        Optional<Person> optionalPerson = personService.getPersonById(person.getId_person());
         if (optionalPerson.isPresent()) {
             return optionalPerson.get();
         } else {
@@ -44,13 +44,13 @@ public class PersonController {
     @PatchMapping("/person")
     public @ResponseBody Person updatePerson(@RequestBody Person person) {
 
-        personService.updatePerson(person.getId(), person);
+        personService.updatePerson(person.getId_person(), person);
         return person;
     }
 
     @DeleteMapping("/person")
     public ResponseEntity<?> deletePerson(@RequestBody Person person) {
-       boolean anyPersonRemoved = personService.deletePerson(person.getId());
+       boolean anyPersonRemoved = personService.deletePerson(person.getId_person());
 
        if (anyPersonRemoved) {
            return ResponseEntity.ok().build();

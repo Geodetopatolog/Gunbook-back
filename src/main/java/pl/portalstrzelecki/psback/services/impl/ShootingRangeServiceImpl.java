@@ -18,7 +18,7 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
 
     @Override
     public void saveShootingRange(ShootingRange shootingRange) {
-        shootingRange.setId(null);
+        shootingRange.setId_shootingrange(null);
         shootingRangeRepository.save(shootingRange);
     }
 
