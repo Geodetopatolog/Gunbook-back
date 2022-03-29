@@ -35,13 +35,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void updatePerson(Long id, Person person) {
+    public boolean updatePerson(Long id, Person person) {
         Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isPresent()) {
             personRepository.save(optionalPerson.get().updatePerson(person));
+            return true;
         }
         else {
-            throw new RuntimeException("Nie można znaleźć człowieka");
+            return false;
         }
 
 

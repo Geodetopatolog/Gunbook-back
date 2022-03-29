@@ -15,11 +15,16 @@ import java.util.Optional;
 @Service
 public class ClubServiceImpl implements ClubService {
 
-    @Autowired
+    final
     ClubRepository clubRepository;
 
-    @Autowired
+    final
     PersonRepository personRepository;
+
+    public ClubServiceImpl(ClubRepository clubRepository, PersonRepository personRepository) {
+        this.clubRepository = clubRepository;
+        this.personRepository = personRepository;
+    }
 
     @Override
     public void saveClub(Club club) {
@@ -43,14 +48,16 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public void updateClub(Long id, Club club) {
+    public boolean updateClub(Long id, Club club) {
         Optional<Club> optionalClub = clubRepository.findById(id);
         if(optionalClub.isPresent()) {
             clubRepository.save(optionalClub.get().updateClub(club));
+            return true;
         }
         else {
-            throw new RuntimeException("Nie można znaleźć człowieka");
+            return false;
         }
+
     }
     @Override
     public Optional<Club> getClubById(long id) {

@@ -3,6 +3,7 @@ package pl.portalstrzelecki.psback.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,16 +17,18 @@ import java.util.Optional;
 @EnableAutoConfiguration
 public class PersonController {
 
-    @Autowired
+    final
     PersonService personService;
 
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
 
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Person addPerson(@RequestBody Person person) {
+    public void addPerson(@RequestBody Person person) {
 
         personService.savePerson(person);
-        return person;
     }
 
     @GetMapping("/person")
@@ -38,14 +41,16 @@ public class PersonController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
         }
-
     }
 
     @PatchMapping("/person")
-    public @ResponseBody Person updatePerson(@RequestBody Person person) {
+    public ResponseEntity<?> updatePerson(@RequestBody Person person) {
 
-        personService.updatePerson(person.getId_person(), person);
-        return person;
+        if (personService.updatePerson(person.getId_person(), person)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/person")

@@ -26,10 +26,8 @@ public class ClubController {
 
     @PostMapping("/club")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody
-    Club createClub(@RequestBody Club club) {
+    public void createClub(@RequestBody Club club) {
         clubService.saveClub(club);
-        return club;
     }
 
     @GetMapping("/club")
@@ -47,8 +45,12 @@ public class ClubController {
 
     @PatchMapping("/club")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateClub(@RequestBody Club club) {
-        clubService.updateClub(club.getId_club(), club);
+    public ResponseEntity<?> updateClub(@RequestBody Club club) {
+        if (clubService.updateClub(club.getId_club(), club)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
@@ -59,9 +61,11 @@ public class ClubController {
 
         if (anyClubRemoved) {
             return ResponseEntity.ok().build();
+        } else  {
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.notFound().build();
+
     }
 
     @GetMapping("/clubs")

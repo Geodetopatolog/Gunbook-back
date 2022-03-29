@@ -16,15 +16,17 @@ import java.util.Optional;
 @EnableAutoConfiguration
 public class ShootingRangeController {
 
-    @Autowired
+    final
     ShootingRangeService shootingRangeService;
+
+    public ShootingRangeController(ShootingRangeService shootingRangeService) {
+        this.shootingRangeService = shootingRangeService;
+    }
 
     @PostMapping("/range")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody
-    ShootingRange saveShootingRange(@RequestBody ShootingRange shootingRange) {
+    public void saveShootingRange(@RequestBody ShootingRange shootingRange) {
         shootingRangeService.saveShootingRange(shootingRange);
-        return shootingRange;
     }
 
     @GetMapping("/range")
@@ -42,8 +44,15 @@ public class ShootingRangeController {
 
     @PatchMapping("/range")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateShootingRange(@RequestBody ShootingRange shootingRange) {
-        shootingRangeService.updateShootingRange(shootingRange.getId_shootingrange(), shootingRange);
+    public ResponseEntity<?> updateShootingRange(@RequestBody ShootingRange shootingRange) {
+
+
+        if (shootingRangeService.updateShootingRange(shootingRange.getId_shootingrange(), shootingRange)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @DeleteMapping("/range")

@@ -34,17 +34,15 @@ public class Club {
     @OneToMany(mappedBy = "club")
     private List<Person> members;
 
-    @OneToMany (mappedBy = "residentClub")
-    private List<ShootingRange> ranges;
+    @ManyToMany (mappedBy = "clubs")
+    private List<ShootingRange> ranges = new ArrayList<>();
 
     private boolean sport=false;
     private boolean fun=false;
     private boolean cours=false;
 
-
     public Club() {
     }
-
 
     public Club updateClub(Club club) {
         this.logoURL = club.getLogoURL();
@@ -77,10 +75,24 @@ public class Club {
         }
     }
 
+    public void addRange(ShootingRange shootingRange) {
+        ranges.add(shootingRange);
+    }
+
 
 
     @Override
     public String toString() {
         return super.toString();
     }
+
+    public void deleteRange(ShootingRange shootingRange) {
+        ranges.remove(shootingRange);
+    }
+
+//    public boolean isRangePresent(Long id_range) {
+//
+//        this.ranges.stream().
+//
+//    }
 }

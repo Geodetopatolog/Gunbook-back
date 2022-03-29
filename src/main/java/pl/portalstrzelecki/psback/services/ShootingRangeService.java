@@ -1,6 +1,5 @@
 package pl.portalstrzelecki.psback.services;
 
-import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 
 import java.util.List;
@@ -10,8 +9,12 @@ public interface ShootingRangeService {
 
     void saveShootingRange(ShootingRange shootingRange);
     boolean deleteShootingRange(Long id);
-    void updateShootingRange(Long id, ShootingRange shootingRange);
+    boolean updateShootingRange(Long id, ShootingRange shootingRange);
     Optional<ShootingRange> getShootingRangeById(long id);
 
     List<ShootingRange> getAllShootingRanges();
+
+    boolean addClub(Long id_range, Long id_club);
+
+    boolean deleteRangeClub(Long id_range, Long id_club);
 }

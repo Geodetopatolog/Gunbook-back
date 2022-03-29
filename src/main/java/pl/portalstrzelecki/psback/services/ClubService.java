@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ClubService {
     void saveClub(Club club);
     boolean deleteClub(Long id);
-    void updateClub(Long id, Club club);
+    boolean updateClub(Long id, Club club);
     Optional<Club> getClubById(long id);
     boolean addClubMember(Long id_person, Long id_club);
 

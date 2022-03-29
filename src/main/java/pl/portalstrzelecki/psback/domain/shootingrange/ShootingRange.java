@@ -8,6 +8,7 @@ import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,11 +25,14 @@ public class ShootingRange {
     private String name;
     private String description;
     private String adress;
-    @ManyToOne
-    @JoinColumn (name = "id_club")
-    private Club residentClub;
 
-//    private List<Club> clubs;
+    @ManyToMany (cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "clubs_ranges",
+            joinColumns = @JoinColumn(name = "id_shootingrange"),
+            inverseJoinColumns = @JoinColumn(name = "id_club")
+    )
+    private List<Club> clubs = new ArrayList<>();
 
 
     public ShootingRange() {
@@ -42,8 +46,17 @@ public class ShootingRange {
         return this;
     }
 
+    public void addClub(Club club) {
+        clubs.add(club);
+    }
+
+
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public void deleteClub(Club club) {
+        clubs.remove(club);
     }
 }
