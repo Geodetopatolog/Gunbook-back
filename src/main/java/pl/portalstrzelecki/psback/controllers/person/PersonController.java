@@ -1,42 +1,37 @@
-package pl.portalstrzelecki.psback.controllers;
+package pl.portalstrzelecki.psback.controllers.person;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.person.Person;
+import pl.portalstrzelecki.psback.dto.PersonDTO;
 import pl.portalstrzelecki.psback.services.PersonService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@EnableAutoConfiguration
+@RequiredArgsConstructor
 public class PersonController {
 
-    final
-    PersonService personService;
+    private final PersonService personService;
 
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
 
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addPerson(@RequestBody Person person) {
-
-        personService.savePerson(person);
+    public void addPerson(@RequestBody PersonDTO personDTO) {
+        personService.savePerson(Person.of(personDTO));
     }
 
     @GetMapping("/person")
-    public @ResponseBody Person getPersonById(@RequestBody Person person)
+    public @ResponseBody PersonDTO getPersonById(@RequestBody Person person)
     {
         Optional<Person> optionalPerson = personService.getPersonById(person.getId_person());
         if (optionalPerson.isPresent()) {
-            return optionalPerson.get();
+            return PersonDTO.of(optionalPerson.get());
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");

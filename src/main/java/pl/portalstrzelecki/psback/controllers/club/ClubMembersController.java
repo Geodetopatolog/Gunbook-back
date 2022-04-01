@@ -1,34 +1,23 @@
-package pl.portalstrzelecki.psback.controllers;
+package pl.portalstrzelecki.psback.controllers.club;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.services.ClubService;
 import pl.portalstrzelecki.psback.services.PersonService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
-@EnableAutoConfiguration
+@RequiredArgsConstructor
 public class ClubMembersController {
 
-    final
-    ClubService clubService;
-
-    final
-    PersonService personService;
-
-    public ClubMembersController(ClubService clubService, PersonService personService) {
-        this.clubService = clubService;
-        this.personService = personService;
-    }
+    private final ClubService clubService;
 
 
     @GetMapping("club_members")

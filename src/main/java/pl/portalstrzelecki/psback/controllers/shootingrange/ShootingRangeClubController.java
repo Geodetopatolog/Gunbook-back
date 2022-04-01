@@ -1,6 +1,6 @@
-package pl.portalstrzelecki.psback.controllers;
+package pl.portalstrzelecki.psback.controllers.shootingrange;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.portalstrzelecki.psback.domain.club.Club;
@@ -13,18 +13,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class ShootingRangeClubController {
 
-    final
-    ShootingRangeService shootingRangeService;
-
-    final
-    ClubService clubService;
-
-    public ShootingRangeClubController(ShootingRangeService shootingRangeService, ClubService clubService) {
-        this.shootingRangeService = shootingRangeService;
-        this.clubService = clubService;
-    }
+    private final ShootingRangeService shootingRangeService;
 
 
     @GetMapping("/range_clubs")
@@ -37,7 +29,7 @@ public class ShootingRangeClubController {
     }
 
 
-    @PostMapping("/range_clubs")
+    @PatchMapping("/range_clubs")
     public ResponseEntity<?> addClubRange(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
         Long id_range = json.get("id_range");

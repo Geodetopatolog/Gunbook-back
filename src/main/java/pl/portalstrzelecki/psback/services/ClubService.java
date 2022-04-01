@@ -1,6 +1,7 @@
 package pl.portalstrzelecki.psback.services;
 
 import pl.portalstrzelecki.psback.domain.club.Club;
+import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 
 public interface ClubService {
+
     void saveClub(Club club);
     boolean deleteClub(Long id);
     boolean updateClub(Long id, Club club);
@@ -19,4 +21,16 @@ public interface ClubService {
     boolean deleteClubMember(Long id_person, Long id_club);
 
     List<Person> getClubMembers(Long id_club);
+
+    List<Event> getClubEvents(Long id_club);
+
+    boolean addClubEvent(Long id_event, Long id_club);
+
+    boolean deleteClubEvent(Long id_event, Long id_club);
+
+    boolean addOwner(Long id_person, Long id_club);
+
+    boolean deleteClubOwner(Long id_person, Long id_club);
+
+
 }

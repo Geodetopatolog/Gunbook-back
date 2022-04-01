@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
+import pl.portalstrzelecki.psback.dto.PersonDTO;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,19 +23,35 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_person;
 
-
     private String name = "";
     private String surname = "";
     private String nick = "";
+    private String description = "";
 
-    @ManyToOne //(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "clubs_owners",
+            joinColumns = @JoinColumn(name = "id_person"),
+            inverseJoinColumns = @JoinColumn(name = "id_club")
+    )
+    private List<Club> ownedClubs;
+
+    @ManyToOne
     @JoinColumn(name = "id_club")
     private Club club;
 
-    private String description = "";
-
 
     public Person() {
+    }
+
+    public static Person of(PersonDTO personDTO) {
+        Person person = new Person();
+        person.setName(personDTO.getName());
+        person.setSurname(personDTO.getSurname());
+        person.setNick(personDTO.getNick());
+        person.setClub(personDTO.getClub());
+        person.setDescription(personDTO.getDescription());
+        return person;
     }
 
     public Person updatePerson(Person person) {
@@ -56,5 +74,13 @@ public class Person {
     @JsonIgnore
     public Club getClub() {
         return club;
+    }
+
+    public void addOwnedClub(Club club) {
+        ownedClubs.add(club);
+    }
+
+    public void deleteOwnedClub(Club club) {
+        ownedClubs.remove(club);
     }
 }

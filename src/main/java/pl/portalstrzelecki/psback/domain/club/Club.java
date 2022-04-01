@@ -1,19 +1,17 @@
 package pl.portalstrzelecki.psback.domain.club;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -29,19 +27,29 @@ public class Club {
     private String logoURL = "";
     private String name = "";
     private String description = "";
-//    private List<Person> owners;
+
+    @ManyToMany(mappedBy = "ownedClubs")
+    private List<Person> owners;
 
     @OneToMany(mappedBy = "club")
-    private List<Person> members;
+    private List<Person> members = new ArrayList<>();;
 
     @ManyToMany (mappedBy = "clubs")
     private List<ShootingRange> ranges = new ArrayList<>();
+
+    @OneToMany (mappedBy = "organizer")
+    private List<Event> events = new ArrayList<>();;
 
     private boolean sport=false;
     private boolean fun=false;
     private boolean cours=false;
 
     public Club() {
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
     public Club updateClub(Club club) {
@@ -55,44 +63,34 @@ public class Club {
     }
 
     public void addMember(Person member) {
-        if (members == null) {
-            members = new ArrayList<>();
-        }
         members.add(member);
-        member.setClub(this);
     }
 
-    public boolean deleteMember(Person person) {
-        if (members==null) {
-            return false;
-        } else {
-            members.stream().forEach(member -> {
-                if (member.getId_person()==person.getId_person()) {
-                    member.resetClub();
-                }
-            });
-            return true;
-        }
+    public void deleteMember(Person person) {
+        members.remove(person);
     }
 
     public void addRange(ShootingRange shootingRange) {
         ranges.add(shootingRange);
     }
 
-
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     public void deleteRange(ShootingRange shootingRange) {
         ranges.remove(shootingRange);
     }
 
-//    public boolean isRangePresent(Long id_range) {
-//
-//        this.ranges.stream().
-//
-//    }
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
+    public void deleteEvent(Event event) {
+        events.remove(event);
+    }
+
+    public void addOwner(Person person) {
+        owners.add(person);
+    }
+
+    public void deleteOwner(Person person) {
+        owners.remove(person);
+    }
 }

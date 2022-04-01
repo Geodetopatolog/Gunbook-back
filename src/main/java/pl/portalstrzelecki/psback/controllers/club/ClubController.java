@@ -1,6 +1,6 @@
-package pl.portalstrzelecki.psback.controllers;
+package pl.portalstrzelecki.psback.controllers.club;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,20 +9,14 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.services.ClubService;
 
-
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@EnableAutoConfiguration
+@RequiredArgsConstructor
 public class ClubController {
 
-    final
-    ClubService clubService;
-
-    public ClubController(ClubService clubService) {
-        this.clubService = clubService;
-    }
+    private final ClubService clubService;
 
     @PostMapping("/club")
     @ResponseStatus(HttpStatus.CREATED)

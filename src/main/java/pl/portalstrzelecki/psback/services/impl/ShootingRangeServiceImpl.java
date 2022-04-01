@@ -14,11 +14,16 @@ import java.util.Optional;
 @Service
 public class ShootingRangeServiceImpl implements ShootingRangeService {
 
-    @Autowired
+    final
     ShootingRangeRepository shootingRangeRepository;
 
-    @Autowired
+    final
     ClubRepository clubRepository;
+
+    public ShootingRangeServiceImpl(ShootingRangeRepository shootingRangeRepository, ClubRepository clubRepository) {
+        this.shootingRangeRepository = shootingRangeRepository;
+        this.clubRepository = clubRepository;
+    }
 
     @Override
     public void saveShootingRange(ShootingRange shootingRange) {

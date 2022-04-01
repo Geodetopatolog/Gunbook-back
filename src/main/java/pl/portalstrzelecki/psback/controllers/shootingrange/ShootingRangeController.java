@@ -1,6 +1,6 @@
-package pl.portalstrzelecki.psback.controllers;
+package pl.portalstrzelecki.psback.controllers.shootingrange;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@EnableAutoConfiguration
+@RequiredArgsConstructor
 public class ShootingRangeController {
 
-    final
-    ShootingRangeService shootingRangeService;
+    private final ShootingRangeService shootingRangeService;
 
-    public ShootingRangeController(ShootingRangeService shootingRangeService) {
-        this.shootingRangeService = shootingRangeService;
-    }
 
     @PostMapping("/range")
     @ResponseStatus(HttpStatus.CREATED)
@@ -46,13 +42,11 @@ public class ShootingRangeController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> updateShootingRange(@RequestBody ShootingRange shootingRange) {
 
-
         if (shootingRangeService.updateShootingRange(shootingRange.getId_shootingrange(), shootingRange)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
-
     }
 
     @DeleteMapping("/range")

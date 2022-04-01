@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
+import pl.portalstrzelecki.psback.domain.event.Event;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,8 +36,16 @@ public class ShootingRange {
     private List<Club> clubs = new ArrayList<>();
 
 
-    public ShootingRange() {
+    @OneToMany(mappedBy = "place")
+    private List<Event> events;
 
+
+    public ShootingRange() {
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
     public ShootingRange updateShootingRange(ShootingRange shootingRange) {
@@ -50,13 +59,17 @@ public class ShootingRange {
         clubs.add(club);
     }
 
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     public void deleteClub(Club club) {
         clubs.remove(club);
     }
+
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
+    public void deleteEvent(Event event) {
+        events.remove(event);
+    }
+
+
 }

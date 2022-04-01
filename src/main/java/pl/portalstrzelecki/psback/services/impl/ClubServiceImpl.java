@@ -1,10 +1,12 @@
 package pl.portalstrzelecki.psback.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.portalstrzelecki.psback.domain.club.Club;
+import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
+import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.repositories.ClubRepository;
+import pl.portalstrzelecki.psback.repositories.EventRepository;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.services.ClubService;
 
@@ -21,9 +23,13 @@ public class ClubServiceImpl implements ClubService {
     final
     PersonRepository personRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository, PersonRepository personRepository) {
+    final
+    EventRepository eventRepository;
+
+    public ClubServiceImpl(ClubRepository clubRepository, PersonRepository personRepository, EventRepository eventRepository) {
         this.clubRepository = clubRepository;
         this.personRepository = personRepository;
+        this.eventRepository = eventRepository;
     }
 
     @Override
@@ -38,6 +44,7 @@ public class ClubServiceImpl implements ClubService {
         if(optionalClub.isPresent()) {
             Club club = optionalClub.get();
             club.getMembers().stream().forEach(person -> person.resetClub());
+            club.getEvents().stream().forEach(event -> event.resetOrganizer());
             clubRepository.save(club);
             clubRepository.delete(optionalClub.get());
             return true;
@@ -94,7 +101,7 @@ public class ClubServiceImpl implements ClubService {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
-        if(optionalClub.isPresent() && optionalPerson.isPresent()) {
+        if (optionalClub.isPresent() && optionalPerson.isPresent()) {
             Club club = optionalClub.get();
             Person member = optionalPerson.get();
 
@@ -117,6 +124,98 @@ public class ClubServiceImpl implements ClubService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public List<Event> getClubEvents(Long id_club) {
+
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+
+        if (optionalClub.isPresent()) {
+            return optionalClub.get().getEvents();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public boolean addClubEvent(Long id_event, Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalClub.isPresent() && optionalEvent.isPresent()) {
+            Club club = optionalClub.get();
+            Event event = optionalEvent.get();
+
+            club.addEvent(event);
+            clubRepository.save(club);
+            event.setOrganizer(club);
+            eventRepository.save(event);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean deleteClubEvent(Long id_event, Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalClub.isPresent() && optionalEvent.isPresent()) {
+            Club club = optionalClub.get();
+            Event event = optionalEvent.get();
+
+            club.deleteEvent(event);
+            event.resetOrganizer();
+            clubRepository.save(club);
+            eventRepository.save(event);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean addOwner(Long id_person, Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalClub.isPresent() && optionalPerson.isPresent()) {
+            Club club = optionalClub.get();
+            Person person = optionalPerson.get();
+
+            club.addOwner(person);
+            clubRepository.save(club);
+            person.addOwnedClub(club);
+            personRepository.save(person);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean deleteClubOwner(Long id_person, Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalClub.isPresent() && optionalPerson.isPresent()) {
+            Club club = optionalClub.get();
+            Person person = optionalPerson.get();
+
+            if (club.getOwners().contains(person)) {
+                club.deleteOwner(person);
+                person.deleteOwnedClub(club);
+
+                clubRepository.save(club);
+                personRepository.save(person);
+                return true;
+            } else return false;
+
+
+        } else return false;
+
+
+
+
 
 
     }
