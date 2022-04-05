@@ -55,8 +55,8 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public boolean updateClub(Long id, Club club) {
-        Optional<Club> optionalClub = clubRepository.findById(id);
+    public boolean updateClub(Club club) {
+        Optional<Club> optionalClub = clubRepository.findById(club.getId_club());
         if(optionalClub.isPresent()) {
             clubRepository.save(optionalClub.get().updateClub(club));
             return true;

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.services.ClubService;
-import pl.portalstrzelecki.psback.services.EventService;
 
 import java.util.List;
 import java.util.Map;

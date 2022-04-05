@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
         Optional<Event> optionalEvent = eventRepository.findById(id);
 
         if (optionalEvent.isPresent()) {
-            eventRepository.save(optionalEvent.get());
+            eventRepository.save(optionalEvent.get()); //TODO dopisać metodę update
             return true;
         } else {
             return false;

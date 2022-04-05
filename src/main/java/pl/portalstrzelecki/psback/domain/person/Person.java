@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
-import pl.portalstrzelecki.psback.dto.PersonDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 
 import javax.persistence.*;
 import java.util.List;
@@ -44,12 +44,18 @@ public class Person {
     public Person() {
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
     public static Person of(PersonDTO personDTO) {
         Person person = new Person();
+        person.setId_person(personDTO.getId_person());
         person.setName(personDTO.getName());
         person.setSurname(personDTO.getSurname());
         person.setNick(personDTO.getNick());
-        person.setClub(personDTO.getClub());
+//        person.setClub(personDTO.getClub()); //w tę strone to raczej nie będzie potrzebne :)
         person.setDescription(personDTO.getDescription());
         return person;
     }
@@ -66,9 +72,13 @@ public class Person {
         this.setClub(null);
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
+    public String getClub_name() {
+        if (club != null) {
+            return club.getName();
+        } else {
+            return "Nie jest człokiem żadnego klubu";
+        }
+
     }
 
     @JsonIgnore

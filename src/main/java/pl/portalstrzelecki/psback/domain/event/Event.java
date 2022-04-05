@@ -3,7 +3,6 @@ package pl.portalstrzelecki.psback.domain.event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
@@ -34,7 +33,7 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "id_shootingrange")
     private ShootingRange place;
-
+    //TODO dorobić tę relację
 //    private List<Person> participants;
 
     private LocalDate dateOfStart;
@@ -51,7 +50,7 @@ public class Event {
 
     private boolean isCourse = false;
 
-    private int entryFee = 0;
+    private Long entryFee = 0L;
 
     public Event() {
 
@@ -66,7 +65,7 @@ public class Event {
         this.setOrganizer(null);
     }
 
-    public void resetPlacer() {
+    public void resetPlace() {
         this.setPlace(null);
     }
 
@@ -74,28 +73,6 @@ public class Event {
 
     }
 
-    //    public void addParticipant(Person person) {
-//        participants.add(person);
-//    }
-//
-//    public void deleteParticipant(Person person) {
-//        participants.remove(person);
-//    }
-//
-//    public void deleteParticipant(String name, String surname) {
-//        for (int i=0;i<participants.size();i++) {
-//            if (participants.get(i).getName().equals(name) && participants.get(i).getSurname().equals(surname)) {
-//                participants.remove(i);
-//            }
-//        }
-//    }
-//    public void deleteParticipant(String nick) {
-//        for (int i=0;i<participants.size();i++) {
-//            if (participants.get(i).getNick().equals(nick)) {
-//                participants.remove(i);
-//            }
-//        }
-//    }
 
 
 

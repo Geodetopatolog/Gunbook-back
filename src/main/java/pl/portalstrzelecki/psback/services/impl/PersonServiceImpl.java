@@ -35,23 +35,21 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public boolean updatePerson(Long id, Person person) {
-        Optional<Person> optionalPerson = personRepository.findById(id);
+    public boolean updatePerson(Person person) {
+        Optional<Person> optionalPerson = personRepository.findById(person.getId_person());
         if(optionalPerson.isPresent()) {
             personRepository.save(optionalPerson.get().updatePerson(person));
+//            personRepository.save(person);
             return true;
         }
         else {
             return false;
         }
-
-
     }
 
     @Override
     public Optional<Person> getPersonById(long id) {
         Optional<Person> optionalPerson = personRepository.findById(id);
-
             return optionalPerson;
     }
 
