@@ -10,6 +10,7 @@ import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,12 +30,17 @@ public class Event {
     @JoinColumn(name = "id_club")
     private Club organizer;
 
-
     @ManyToOne
     @JoinColumn(name = "id_shootingrange")
     private ShootingRange place;
-    //TODO dorobić tę relację
-//    private List<Person> participants;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event_participants",
+            joinColumns = @JoinColumn(name = "id_event"),
+            inverseJoinColumns = @JoinColumn(name = "id_person")
+    )
+    private List<Person> participants = new ArrayList<>();
 
     private LocalDate dateOfStart;
     private LocalDate dateOfEnd;
@@ -43,11 +49,8 @@ public class Event {
 
     private boolean membersOnly = true;
     private boolean openEntry = false;
-
     private boolean isCompetition = false;
-
     private boolean isPractice = false;
-
     private boolean isCourse = false;
 
     private Long entryFee = 0L;

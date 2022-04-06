@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.EventService;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
@@ -20,7 +22,7 @@ public class EventShootingRangeController {
 
 
     @GetMapping("event_range")
-    public ShootingRange getEventRange(@RequestBody Map<String, Long> json) {
+    public ShootingRangeDTO getEventRange(@RequestBody Map<String, Long> json) {
 
         Long id_event = json.get("id_event");
 
@@ -28,7 +30,7 @@ public class EventShootingRangeController {
 
         if (optionalShootingRange.isPresent()) {
             ShootingRange shootingRange = optionalShootingRange.get();
-            return shootingRange;
+            return ShootingRangeMapper.INSTANCE.ShootingRangeToShootingRangeDTO(shootingRange);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "nie ustawiono miejsca wydarzenia");
@@ -41,7 +43,7 @@ public class EventShootingRangeController {
         Long id_event = json.get("id_event");
 
 
-        if (id_event != null && id_event != null) {
+        if (id_event != null && id_range != null) {
             boolean anyRangeAdded = eventService.addEventRange(id_event, id_range);
             if (anyRangeAdded) {
                 return ResponseEntity.accepted().build();

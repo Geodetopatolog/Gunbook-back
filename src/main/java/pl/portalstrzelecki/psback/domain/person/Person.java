@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
+import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 
 import javax.persistence.*;
@@ -36,6 +37,12 @@ public class Person {
     )
     private List<Club> ownedClubs;
 
+    @ManyToMany (mappedBy = "participants")
+    private List<Event> eventsJoined;
+
+
+
+    //TODO zmienić na ManyToMany
     @ManyToOne
     @JoinColumn(name = "id_club")
     private Club club;

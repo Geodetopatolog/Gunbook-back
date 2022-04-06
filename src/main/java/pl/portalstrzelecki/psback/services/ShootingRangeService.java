@@ -9,7 +9,7 @@ public interface ShootingRangeService {
 
     void saveShootingRange(ShootingRange shootingRange);
     boolean deleteShootingRange(Long id);
-    boolean updateShootingRange(Long id, ShootingRange shootingRange);
+    boolean updateShootingRange(ShootingRange shootingRange);
     Optional<ShootingRange> getShootingRangeById(long id);
 
     List<ShootingRange> getAllShootingRanges();

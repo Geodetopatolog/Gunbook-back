@@ -58,7 +58,8 @@ public class ClubServiceImpl implements ClubService {
     public boolean updateClub(Club club) {
         Optional<Club> optionalClub = clubRepository.findById(club.getId_club());
         if(optionalClub.isPresent()) {
-            clubRepository.save(optionalClub.get().updateClub(club));
+//            clubRepository.save(optionalClub.get().updateClub(club));
+            clubRepository.save(club);
             return true;
         }
         else {
@@ -212,11 +213,16 @@ public class ClubServiceImpl implements ClubService {
 
 
         } else return false;
+    }
 
+    @Override
+    public List<Person> getClubOwners(Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
 
-
-
-
-
+        if (optionalClub.isPresent()) {
+            return optionalClub.get().getOwners();
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

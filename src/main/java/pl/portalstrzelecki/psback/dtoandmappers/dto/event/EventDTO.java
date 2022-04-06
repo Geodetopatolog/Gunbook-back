@@ -21,4 +21,23 @@ public class EventDTO {
     private boolean isPractice;
     private boolean isCourse;
 
+    public boolean notNull() {
+        if (
+            id_event == null ||
+            name == null ||
+            description  == null ||
+            dateOfStart  == null ||
+            dateOfEnd  == null ||
+            hourOfEnd  == null ||
+            hourOfStart  == null ||
+            entryFee  == null
+        ) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
 }

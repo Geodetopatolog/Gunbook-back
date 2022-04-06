@@ -1,16 +1,17 @@
 package pl.portalstrzelecki.psback.controllers.event;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.EventService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,17 +23,18 @@ public class EventController {
 
     @PostMapping("/event")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createEvent(@RequestBody Event event) {
-        eventService.saveEvent(event);
+    public void createEvent(@RequestBody EventDTO eventDTO) {
+        eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO));
     }
 
     @GetMapping("/event")
-    public @ResponseBody
-    Event getEventById(@RequestBody Event event) {
-        Optional<Event> optionalEvent = eventService.getEventById(event.getId_event());
+    public @ResponseBody EventDTO getEventById(@RequestBody Map<String, Long> json) {
+        Long id_event = json.get("id_event");
+
+        Optional<Event> optionalEvent = eventService.getEventById(id_event);
 
         if (optionalEvent.isPresent()) {
-            return optionalEvent.get();
+            return EventMapper.INSTANCE.EventToEventDto(optionalEvent.get());
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
@@ -40,33 +42,35 @@ public class EventController {
     }
 
     @PatchMapping("/event")
-    public ResponseEntity<?> updateEvent(@RequestBody Event event) {
-        if (eventService.updateEvent(event.getId_event(), event)) {
-            return ResponseEntity.ok().build();
+    public ResponseEntity<?> updateEvent(@RequestBody EventDTO eventDTO) {
+        if (eventDTO.notNull()) {
+            Event event = EventMapper.INSTANCE.EventDtoToEvent(eventDTO);
+            if (eventService.updateEvent(event)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body("Niekompletne dane");
         }
     }
 
-
-
     @DeleteMapping("/event")
-    public ResponseEntity<?> deleteEvent(@RequestBody Event event) {
-        boolean anyEventRemoved = eventService.deleteEvent(event.getId_event());
+    public ResponseEntity<?> deleteEvent(@RequestBody Map<String, Long> json) {
+        Long id_event = json.get("id_event");
+        boolean anyEventRemoved = eventService.deleteEvent(id_event);
 
         if (anyEventRemoved) {
             return ResponseEntity.ok().build();
         } else  {
             return ResponseEntity.notFound().build();
         }
-
-
     }
 
     @GetMapping("/events")
     public @ResponseBody
-    List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    List<EventDTO> getAllEvents() {
+        return EventMapper.INSTANCE.EventsToEventDtos(eventService.getAllEvents());
     }
 
 }

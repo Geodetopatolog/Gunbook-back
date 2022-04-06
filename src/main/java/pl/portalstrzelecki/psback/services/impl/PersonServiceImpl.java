@@ -38,8 +38,8 @@ public class PersonServiceImpl implements PersonService {
     public boolean updatePerson(Person person) {
         Optional<Person> optionalPerson = personRepository.findById(person.getId_person());
         if(optionalPerson.isPresent()) {
-            personRepository.save(optionalPerson.get().updatePerson(person));
-//            personRepository.save(person);
+//            personRepository.save(optionalPerson.get().updatePerson(person));
+            personRepository.save(person);
             return true;
         }
         else {

@@ -1,6 +1,5 @@
 package pl.portalstrzelecki.psback.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
@@ -44,8 +43,8 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
     }
 
     @Override
-    public boolean updateShootingRange(Long id, ShootingRange shootingRange) {
-        Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id);
+    public boolean updateShootingRange(ShootingRange shootingRange) {
+        Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(shootingRange.getId_shootingrange());
         if(optionalShootingRange.isPresent()) {
             shootingRangeRepository.save(optionalShootingRange.get().updateShootingRange(shootingRange));
             return true;
@@ -53,7 +52,6 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
         else {
             return false;
         }
-
     }
 
     @Override
@@ -109,11 +107,7 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
                 shootingRangeRepository.save(shootingRange);
                 return true;
             } else return false;
-
-
         } else return false;
-
-
 
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.event.Event;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
@@ -17,16 +19,15 @@ public class ClubEventsController {
 
     private final ClubService clubService;
 
-
     @GetMapping("club_events")
-    public List<Event> getClubEvents(@RequestBody Map<String, Long> json) {
+    public List<EventDTO> getClubEvents(@RequestBody Map<String, Long> json) {
 
         Long id_club = json.get("id_club");
 
         List<Event> clubEvents = clubService.getClubEvents(id_club);
 
         if (!clubEvents.isEmpty()) {
-            return clubEvents;
+            return EventMapper.INSTANCE.EventsToEventDtos(clubEvents);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
@@ -38,8 +39,9 @@ public class ClubEventsController {
         Long id_club = json.get("id_club");
         Long id_event = json.get("id_event");
 
-        boolean anyEventAdded = clubService.addClubEvent(id_event, id_club);
+
         if (id_event != null && id_club != null) {
+            boolean anyEventAdded = clubService.addClubEvent(id_event, id_club);
             if (anyEventAdded) {
                 return ResponseEntity.accepted().build();
             }
@@ -54,8 +56,9 @@ public class ClubEventsController {
         Long id_club = json.get("id_club");
         Long id_event = json.get("id_event");
 
-        boolean anyEventRemoved = clubService.deleteClubEvent(id_event, id_club);
+
         if (id_event != null && id_club != null) {
+            boolean anyEventRemoved = clubService.deleteClubEvent(id_event, id_club);
             if (anyEventRemoved) {
                 return ResponseEntity.ok().build();
             }

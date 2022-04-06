@@ -1,30 +1,27 @@
 package pl.portalstrzelecki.psback.services.impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.repositories.EventRepository;
+import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.repositories.ShootingRangeRepository;
 import pl.portalstrzelecki.psback.services.EventService;
-import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class EventServiceImpl implements EventService {
 
     final EventRepository eventRepository;
-
     final ShootingRangeRepository shootingRangeRepository;
+    final PersonRepository personRepository;
 
-    public EventServiceImpl(EventRepository eventRepository, ShootingRangeRepository shootingRangeRepository) {
-        this.eventRepository = eventRepository;
-        this.shootingRangeRepository = shootingRangeRepository;
-    }
-
+//podstawowe------------------------------------------------------------
     @Override
     public void saveEvent(Event event) {
         event.setId_event(null);
@@ -48,11 +45,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean updateEvent(Long id, Event event) {
-        Optional<Event> optionalEvent = eventRepository.findById(id);
+    public boolean updateEvent(Event event) {
+        Optional<Event> optionalEvent = eventRepository.findById(event.getId_event());
 
         if (optionalEvent.isPresent()) {
-            eventRepository.save(optionalEvent.get()); //TODO dopisać metodę update
+//            eventRepository.save(optionalEvent.get());
+            eventRepository.save(event);
             return true;
         } else {
             return false;
@@ -66,18 +64,47 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean addEventParticipant(Long id_person, Long id_club) {
-        return false;
-    }
-
-    @Override
     public List<Event> getAllEvents() {
         return (List<Event>) eventRepository.findAll();
     }
 
+
+    //Participants-------------------------------------------------------------------
     @Override
-    public boolean deleteEventParticipant(Long id_person, Long id_club) {
-        return false;
+    public boolean addEventParticipant(Long id_person, Long id_event) {
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalEvent.isPresent() && optionalPerson.isPresent()) {
+            Event event = optionalEvent.get();
+            Person person = optionalPerson.get();
+
+            event.getParticipants().add(person);
+            person.getEventsJoined().add(event);
+
+            eventRepository.save(event);
+            personRepository.save(person);
+            return true;
+
+        } else return false;
+    }
+
+    @Override
+    public boolean deleteEventParticipant(Long id_person, Long id_event) {
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalEvent.isPresent() && optionalPerson.isPresent()) {
+            Event event = optionalEvent.get();
+            Person person = optionalPerson.get();
+
+            event.getParticipants().remove(person);
+            person.getEventsJoined().remove(event);
+
+            eventRepository.save(event);
+            personRepository.save(person);
+            return true;
+        } else return false;
     }
 
     @Override
@@ -85,6 +112,10 @@ public class EventServiceImpl implements EventService {
         return null;
     }
 
+
+
+
+    //ShootingRange------------------------------------------------------
     @Override
     public Optional<ShootingRange> getPlace(Long id_event) {
         Optional<Event> optionalEvent = eventRepository.findById(id_event);

@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
@@ -20,12 +23,12 @@ public class ShootingRangeClubController {
 
 
     @GetMapping("/range_clubs")
-    public List<Club> getClubRanges(@RequestBody Map<String, Long> json) {
+    public List<ClubDTO> getClubRanges(@RequestBody Map<String, Long> json) {
 
         Long id_club = json.get("id_range");
         Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(id_club);
         ShootingRange shootingRange = optionalShootingRange.get();
-        return shootingRange.getClubs();
+        return ClubMapper.INSTANCE.ClubToClubDtos(shootingRange.getClubs());
     }
 
 

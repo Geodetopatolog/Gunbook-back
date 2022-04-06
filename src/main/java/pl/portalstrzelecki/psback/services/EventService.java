@@ -11,7 +11,7 @@ public interface EventService {
 
     void saveEvent(Event event);
     boolean deleteEvent(Long id);
-    boolean updateEvent(Long id, Event event);
+    boolean updateEvent(Event event);
     Optional<Event> getEventById(long id);
     List<Event> getAllEvents();
 

@@ -31,6 +31,5 @@ public interface ClubService {
     boolean addOwner(Long id_person, Long id_club);
 
     boolean deleteClubOwner(Long id_person, Long id_club);
-
-
+    List<Person> getClubOwners(Long id_club);
 }

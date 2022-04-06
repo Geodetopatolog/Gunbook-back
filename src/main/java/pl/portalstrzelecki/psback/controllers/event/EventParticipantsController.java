@@ -1,47 +1,53 @@
-package pl.portalstrzelecki.psback.controllers.club;
+package pl.portalstrzelecki.psback.controllers.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
-import pl.portalstrzelecki.psback.services.ClubService;
+import pl.portalstrzelecki.psback.services.EventService;
+
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-public class ClubOwnersController {
+public class EventParticipantsController {
 
-    private final ClubService clubService;
+    private final EventService eventService;
 
-    @GetMapping("/club_owners")
+
+    @GetMapping("/event_participants")
     public List<PersonDTO> getClubOwners(@RequestBody Map<String, Long> json) {
 
-        Long id_club = json.get("id_club");
+        Long id_event = json.get("id_event");
 
-        List<Person> clubOwners = clubService.getClubOwners(id_club);
+        Optional<Event> optionalEvent = eventService.getEventById(id_event);
 
-        if (!clubOwners.isEmpty()) {
-            return PersonMapper.INSTANCE.PersonsToPersonDtos(clubOwners);
+        if (optionalEvent.isPresent()) {
+            List<Person> eventPatricipants = optionalEvent.get().getParticipants();
+                return PersonMapper.INSTANCE.PersonsToPersonDtos(eventPatricipants);
+
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
         }
     }
 
-    @PatchMapping("/club_owners")
+    @PatchMapping("/event_participants")
     public ResponseEntity<?> addClubOwner(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
+        Long id_event = json.get("id_event");
         Long id_person = json.get("id_person");
 
-        if (id_person != null && id_club != null) {
-            boolean anyOwnerAdded = clubService.addOwner(id_person, id_club);
-            if (anyOwnerAdded) {
+        if (id_person != null && id_event != null) {
+            boolean anyParticipantAdded = eventService.addEventParticipant(id_person, id_event);
+            if (anyParticipantAdded) {
                 return ResponseEntity.accepted().build();
             } else {
                 return ResponseEntity.notFound().build();
@@ -51,15 +57,15 @@ public class ClubOwnersController {
         }
     }
 
-    @DeleteMapping("/club_owners")
+    @DeleteMapping("/event_participants")
     public ResponseEntity<?> deleteClubOwner(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
+        Long id_event = json.get("id_event");
         Long id_person = json.get("id_person");
 
-        if (id_person != null && id_club != null) {
-            boolean anyClubOwnerDelete = clubService.deleteClubOwner(id_person, id_club);
+        if (id_person != null && id_event != null) {
+            boolean anyEventParticipantDeleted = eventService.deleteEventParticipant(id_person, id_event);
 
-            if (anyClubOwnerDelete) {
+            if (anyEventParticipantDeleted) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.notFound().build();
@@ -68,7 +74,6 @@ public class ClubOwnersController {
             return ResponseEntity.status(417).build();
         }
     }
-
 
 
 }
