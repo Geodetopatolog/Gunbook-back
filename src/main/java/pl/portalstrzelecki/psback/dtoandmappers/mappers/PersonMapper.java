@@ -12,10 +12,10 @@ public interface PersonMapper {
 
     PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
 
-    @Mapping(target = "club_name", expression = "java(person.getClub_name())")
+    @Mapping(target = "clubs_name", expression = "java(person.getClubsName())")
     PersonDTO PersonToPersonDto(Person person);
 
-    @Mapping(target = "club", ignore = true)
+    @Mapping(target = "clubs", ignore = true)
     Person PersonDtoToPerson(PersonDTO personDTO);
 
     List<PersonDTO> PersonsToPersonDtos(List<Person> persons);

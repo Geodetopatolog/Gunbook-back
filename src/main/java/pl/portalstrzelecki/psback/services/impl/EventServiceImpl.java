@@ -1,6 +1,6 @@
 package pl.portalstrzelecki.psback.services.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
     final EventRepository eventRepository;
@@ -34,8 +34,10 @@ public class EventServiceImpl implements EventService {
 
         if(optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
-//            event.setOrganizer(null);
-//            eventRepository.save(event);
+            event.setOrganizers(null);
+            event.setPlace(null);
+            event.setParticipants(null);
+
             eventRepository.delete(event);
             return true;
         }

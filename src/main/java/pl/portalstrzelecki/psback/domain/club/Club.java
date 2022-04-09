@@ -31,13 +31,13 @@ public class Club {
     @ManyToMany(mappedBy = "ownedClubs")
     private List<Person> owners;
 
-    @OneToMany(mappedBy = "club")
+    @ManyToMany(mappedBy = "clubs")
     private List<Person> members = new ArrayList<>();;
 
     @ManyToMany (mappedBy = "clubs")
     private List<ShootingRange> ranges = new ArrayList<>();
 
-    @OneToMany (mappedBy = "organizer")
+    @ManyToMany (mappedBy = "organizers")
     private List<Event> events = new ArrayList<>();;
 
     private boolean sport=false;
@@ -92,5 +92,12 @@ public class Club {
 
     public void deleteOwner(Person person) {
         owners.remove(person);
+    }
+
+    public void prepareToDelete() {
+        this.events = null;
+        this.owners = null;
+        this.members = null;
+        this.ranges = null;
     }
 }

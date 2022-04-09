@@ -1,8 +1,7 @@
 package pl.portalstrzelecki.psback.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.services.PersonService;
@@ -11,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
-    PersonRepository personRepository;
+    final PersonRepository personRepository;
 
     @Override
     public void savePerson(Person person) {
@@ -26,7 +25,12 @@ public class PersonServiceImpl implements PersonService {
     public boolean deletePerson(Long id) {
         Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isPresent()) {
-            personRepository.delete(optionalPerson.get());
+            Person person = optionalPerson.get();
+            person.setOwnedClubs(null);
+            person.setOwnedClubs(null);
+            person.getEventsJoined().stream().forEach(event -> event.setParticipants(null));
+
+            personRepository.delete(person);
             return true;
         }
         else {

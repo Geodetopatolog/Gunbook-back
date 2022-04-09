@@ -4,12 +4,16 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class EventDTO {
     private Long id_event;
     private String name;
     private String description;
+    private List<String> organizers;
+    private int participants;
+    private String range;
     private LocalDate dateOfStart;
     private LocalDate dateOfEnd;
     private LocalTime hourOfStart;

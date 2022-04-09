@@ -9,6 +9,7 @@ public class ClubDTO {
     private String logoURL;
     private String name;
     private String description;
+    private int members_count;
     private boolean sport;
     private boolean fun;
     private boolean cours;

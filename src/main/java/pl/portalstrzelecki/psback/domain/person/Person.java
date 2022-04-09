@@ -1,7 +1,6 @@
 package pl.portalstrzelecki.psback.domain.person;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,9 @@ import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -40,12 +41,13 @@ public class Person {
     @ManyToMany (mappedBy = "participants")
     private List<Event> eventsJoined;
 
-
-
-    //TODO zmienić na ManyToMany
-    @ManyToOne
-    @JoinColumn(name = "id_club")
-    private Club club;
+    @ManyToMany
+    @JoinTable(
+                    name = "clubs_members",
+                    joinColumns = @JoinColumn(name = "id_person"),
+                    inverseJoinColumns = @JoinColumn(name = "id_club")
+            )
+    private List<Club> clubs;
 
 
     public Person() {
@@ -66,31 +68,28 @@ public class Person {
         person.setDescription(personDTO.getDescription());
         return person;
     }
-
-    public Person updatePerson(Person person) {
-        this.setName(person.getName());
-        this.setSurname(person.getSurname());
-        this.setNick(person.getNick());
-        this.setDescription(person.getDescription());
-        return this;
-    }
+//
+//    public Person updatePerson(Person person) {
+//        this.setName(person.getName());
+//        this.setSurname(person.getSurname());
+//        this.setNick(person.getNick());
+//        this.setDescription(person.getDescription());
+//        return this;
+//    }
 
     public void resetClub() {
-        this.setClub(null);
+        this.setClubs(null);
     }
 
-    public String getClub_name() {
-        if (club != null) {
-            return club.getName();
+    public List<String> getClubsName() {
+        if (clubs == null) {
+            List<String> messageList = new ArrayList<>();
+            messageList.add("Nie przypisano organizatorów");
+            return messageList;
         } else {
-            return "Nie jest człokiem żadnego klubu";
+            return clubs.stream().map(Club::getName).collect(Collectors.toList());
         }
 
-    }
-
-    @JsonIgnore
-    public Club getClub() {
-        return club;
     }
 
     public void addOwnedClub(Club club) {
@@ -99,5 +98,9 @@ public class Person {
 
     public void deleteOwnedClub(Club club) {
         ownedClubs.remove(club);
+    }
+
+    public void addClub(Club club) {
+        this.clubs.add(club);
     }
 }

@@ -28,17 +28,30 @@ public class ClubController {
     }
 
     @GetMapping("/club")
-    public @ResponseBody ClubDTO getClubById(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Optional<Club> optionalClub = clubService.getClubById(id_club);
+    public @ResponseBody ClubDTO getClubById(@RequestBody(required = false) Map<String, Long> json,
+                                             @RequestParam (name="name") Optional<String> name) {
+//todo dokładnie jak ma wyglądać przekazywanie parametrów do wyszukiwania, ustali się jak będę robił frontend :)
+// to tutaj to taki ładny kontroler, jak ustalę sposób przekazywania parametrów, to wszystkie ładnie pozmieniam
+        Optional<Club> optionalClub;
+
+        if (name.isPresent()) {
+             optionalClub = clubService.getClubByName(name.get());
+            } else if (json != null && json.containsKey("id_club")) {
+            Long id_club = json.get("id_club");
+            optionalClub = clubService.getClubById(id_club);
+            } else {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Niepoprawne dane wejściowe");
+        }
 
         if (optionalClub.isPresent()) {
             return ClubMapper.INSTANCE.ClubToClubDto(optionalClub.get());
         } else {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
+                    HttpStatus.NOT_FOUND, "Nie znaleziono encji");
         }
     }
+
 
     @PatchMapping("/club")
     @ResponseStatus(HttpStatus.ACCEPTED)

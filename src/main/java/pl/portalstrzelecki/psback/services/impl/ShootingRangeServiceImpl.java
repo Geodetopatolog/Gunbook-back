@@ -1,5 +1,6 @@
 package pl.portalstrzelecki.psback.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
@@ -11,18 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ShootingRangeServiceImpl implements ShootingRangeService {
 
-    final
-    ShootingRangeRepository shootingRangeRepository;
+    final ShootingRangeRepository shootingRangeRepository;
+    final ClubRepository clubRepository;
 
-    final
-    ClubRepository clubRepository;
-
-    public ShootingRangeServiceImpl(ShootingRangeRepository shootingRangeRepository, ClubRepository clubRepository) {
-        this.shootingRangeRepository = shootingRangeRepository;
-        this.clubRepository = clubRepository;
-    }
 
     @Override
     public void saveShootingRange(ShootingRange shootingRange) {
@@ -34,7 +29,10 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
     public boolean deleteShootingRange(Long id) {
         Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id);
         if(optionalShootingRange.isPresent()) {
-            shootingRangeRepository.delete(optionalShootingRange.get());
+            ShootingRange shootingRange = optionalShootingRange.get();
+            shootingRange.setClubs(null);
+
+            shootingRangeRepository.delete(shootingRange);
             return true;
         }
         else {

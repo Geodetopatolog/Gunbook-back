@@ -9,7 +9,6 @@ import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.EventService;
-import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
 import java.util.Map;
 import java.util.Optional;

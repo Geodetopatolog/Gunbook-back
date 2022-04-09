@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -26,9 +27,13 @@ public class Event {
     private String name;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "id_club")
-    private Club organizer;
+    @ManyToMany
+    @JoinTable(
+            name = "event_organizers",
+            joinColumns = @JoinColumn(name = "id_event"),
+            inverseJoinColumns = @JoinColumn(name = "id_club")
+    )
+    private List<Club> organizers;
 
     @ManyToOne
     @JoinColumn(name = "id_shootingrange")
@@ -65,7 +70,7 @@ public class Event {
     }
 
     public void resetOrganizer() {
-        this.setOrganizer(null);
+        this.setOrganizers(null);
     }
 
     public void resetPlace() {
@@ -74,6 +79,32 @@ public class Event {
 
     public void addRange(ShootingRange shootingRange) {
 
+    }
+
+    public void addOrganizer(Club club) {
+        this.organizers.add(club);
+    }
+
+    public List<String> getOrganizersName() {
+        if (organizers==null) {
+            List<String> messageList = new ArrayList<>();
+            messageList.add("Nie przypisano organizatorów");
+            return messageList;
+        } else {
+            return organizers.stream().map(club -> club.getName()).collect(Collectors.toList());
+        }
+    }
+
+    public int getParticipantCount() {
+        return participants.size();
+    }
+
+    public String getPlaceName() {
+        if (place==null) {
+            return "Nie przypisano strzelnicy";
+        } else {
+            return place.getName();
+        }
     }
 
 

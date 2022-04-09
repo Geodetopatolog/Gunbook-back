@@ -3,12 +3,9 @@ package pl.portalstrzelecki.psback.controllers.shootingrange;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
-import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
-import pl.portalstrzelecki.psback.services.ClubService;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
 import java.util.List;

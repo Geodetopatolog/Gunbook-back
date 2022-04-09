@@ -21,7 +21,6 @@ public class ClubEventsController {
 
     @GetMapping("club_events")
     public List<EventDTO> getClubEvents(@RequestBody Map<String, Long> json) {
-
         Long id_club = json.get("id_club");
 
         List<Event> clubEvents = clubService.getClubEvents(id_club);
@@ -55,7 +54,6 @@ public class ClubEventsController {
     public ResponseEntity<?> deleteClubEvent(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
         Long id_event = json.get("id_event");
-
 
         if (id_event != null && id_club != null) {
             boolean anyEventRemoved = clubService.deleteClubEvent(id_event, id_club);

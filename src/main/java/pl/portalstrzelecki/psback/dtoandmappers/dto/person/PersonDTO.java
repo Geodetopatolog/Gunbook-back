@@ -2,6 +2,8 @@ package pl.portalstrzelecki.psback.dtoandmappers.dto.person;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class PersonDTO {
 
@@ -9,7 +11,7 @@ public class PersonDTO {
     private String name;
     private String surname;
     private String nick;
-    private String club_name;
+    private List<String> clubs_name;
     private String description;
 
     public boolean notNull() {

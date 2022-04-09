@@ -32,4 +32,6 @@ public interface ClubService {
 
     boolean deleteClubOwner(Long id_person, Long id_club);
     List<Person> getClubOwners(Long id_club);
+
+    Optional<Club> getClubByName(String name);
 }
