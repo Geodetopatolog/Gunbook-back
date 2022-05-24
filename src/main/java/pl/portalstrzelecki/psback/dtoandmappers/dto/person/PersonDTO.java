@@ -13,17 +13,15 @@ public class PersonDTO {
     private String nick;
     private List<String> clubs_name;
     private String description;
+    private String email;
 
     public boolean notNull() {
-        if (id_person == null ||
+        return !(id_person == null ||
         name == null ||
         surname == null ||
         nick == null ||
-        description == null) {
-            return false;
-        } else {
-            return true;
-        }
+        description == null ||
+        email == null);
     }
 
 

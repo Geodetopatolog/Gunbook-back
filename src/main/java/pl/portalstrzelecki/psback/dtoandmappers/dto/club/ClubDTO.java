@@ -13,19 +13,17 @@ public class ClubDTO {
     private boolean sport;
     private boolean fun;
     private boolean cours;
+    private String email;
 
     public boolean notNull() {
        //booleany przy braku ich podania w dto maja wartosc false
-        if (
+        return !(
         id_club == null ||
         logoURL == null ||
         name == null ||
-        description == null
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+        description == null ||
+        email == null
+        );
     }
 
 }

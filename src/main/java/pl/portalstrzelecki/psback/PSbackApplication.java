@@ -12,3 +12,5 @@ public class PSbackApplication {
 
 }
 //TODO serwis mailowy, powiadomienia o zmianach w eventach, nowych eventach, wiadomości od klubów itp
+
+//todo jakiś podstawowy spring security

@@ -2,6 +2,7 @@ package pl.portalstrzelecki.psback.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.portalstrzelecki.psback.component.clubmail.ClubMail;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
@@ -21,6 +22,7 @@ public class ClubServiceImpl implements ClubService {
     final ClubRepository clubRepository;
     final PersonRepository personRepository;
     final EventRepository eventRepository;
+    final ClubMail clubMail;
 
 
     @Override
@@ -28,17 +30,18 @@ public class ClubServiceImpl implements ClubService {
         club.setId_club(null);
         clubRepository.save(club);
     }
-    //todo posprawdzać wszędzie te metody :)
+
     @Override
     public boolean deleteClub(Long id) {
         Optional<Club> optionalClub = clubRepository.findById(id);
         if(optionalClub.isPresent()) {
             Club club = optionalClub.get();
-            club.getMembers().stream().forEach(person -> person.setClubs(null));
-            club.getEvents().stream().forEach(event -> event.setOrganizers(null));
-            club.getRanges().stream().forEach(shootingRange -> shootingRange.setClubs(null));
-            club.getOwners().stream().forEach(person -> person.setOwnedClubs(null));
-           // clubRepository.save(club);
+            //jeśli w polu danej klasy mamy MappedBy to trzeba usuwać po stronie obiektu konkretny obiekt w tabeli
+            club.getMembers().stream().forEach(person -> person.getClubs().remove(club));
+            club.getEvents().stream().forEach(event -> event.getOrganizers().remove(club));
+            club.getRanges().stream().forEach(shootingRange -> shootingRange.getClubs().remove(club));
+            club.getOwners().stream().forEach(person -> person.getOwnedClubs().remove(club));
+
             clubRepository.delete(club);
             return true;
         }
@@ -88,6 +91,9 @@ public class ClubServiceImpl implements ClubService {
             clubRepository.save(club);
             member.addClub(club);
             personRepository.save(member);
+
+            clubMail.memberRequestMail(club, member);
+
             return true;
         }
         else return false;
@@ -139,11 +145,6 @@ public class ClubServiceImpl implements ClubService {
             return new ArrayList<>();
         }
     }
-
-//    public List<Event> getClubEvents2(Long id) {
-//        List<Event> events = clubRepository.getEventsAssignedToClubWithId(id);
-//            return events;
-//    }
 
 
     @Override

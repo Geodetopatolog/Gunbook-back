@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.portalstrzelecki.psback.component.mailer.Mailer;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;

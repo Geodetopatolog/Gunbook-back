@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-public class ShootingRangeClubController {
+public class ShootingRangeClubsController {
 
     private final ShootingRangeService shootingRangeService;
 
@@ -22,8 +22,8 @@ public class ShootingRangeClubController {
     @GetMapping("/range_clubs")
     public List<ClubDTO> getClubRanges(@RequestBody Map<String, Long> json) {
 
-        Long id_club = json.get("id_range");
-        Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(id_club);
+        Long id_range = json.get("id_range");
+        Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(id_range);
         ShootingRange shootingRange = optionalShootingRange.get();
         return ClubMapper.INSTANCE.ClubToClubDtos(shootingRange.getClubs());
     }

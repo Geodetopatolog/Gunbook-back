@@ -20,17 +20,19 @@ public class PersonController {
 
     private final PersonService personService;
 
-
+    @CrossOrigin
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
     public void addPerson(@RequestBody PersonDTO personDTO) {
         personService.savePerson(PersonMapper.INSTANCE.PersonDtoToPerson(personDTO));
     }
 
+    @CrossOrigin
     @GetMapping("/person")
-    public @ResponseBody PersonDTO getPersonById(@RequestBody Map<String, Long> json)
+//    public @ResponseBody PersonDTO getPersonById(@RequestBody Map<String, Long> json)
+    public @ResponseBody PersonDTO getPersonById(@RequestParam Long id_person)
     {
-        Long id_person = json.get("id_person");
+//        Long id_person = json.get("id_person");
         Optional<Person> optionalPerson = personService.getPersonById(id_person);
         if (optionalPerson.isPresent()) {
             return PersonMapper.INSTANCE.PersonToPersonDto(optionalPerson.get());

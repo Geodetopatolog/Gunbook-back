@@ -30,7 +30,8 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
         Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id);
         if(optionalShootingRange.isPresent()) {
             ShootingRange shootingRange = optionalShootingRange.get();
-            shootingRange.setClubs(null);
+
+            shootingRange.getEvents().stream().forEach(event -> event.setPlace(null));
 
             shootingRangeRepository.delete(shootingRange);
             return true;

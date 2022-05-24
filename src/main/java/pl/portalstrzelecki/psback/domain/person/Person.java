@@ -29,6 +29,7 @@ public class Person {
     private String surname = "";
     private String nick = "";
     private String description = "";
+    private String email;
 
     @ManyToMany
     @JoinTable(
@@ -58,16 +59,6 @@ public class Person {
         return super.toString();
     }
 
-    public static Person of(PersonDTO personDTO) {
-        Person person = new Person();
-        person.setId_person(personDTO.getId_person());
-        person.setName(personDTO.getName());
-        person.setSurname(personDTO.getSurname());
-        person.setNick(personDTO.getNick());
-//        person.setClub(personDTO.getClub()); //w tę strone to raczej nie będzie potrzebne :)
-        person.setDescription(personDTO.getDescription());
-        return person;
-    }
 //
 //    public Person updatePerson(Person person) {
 //        this.setName(person.getName());

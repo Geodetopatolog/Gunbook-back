@@ -34,9 +34,10 @@ public class EventServiceImpl implements EventService {
 
         if(optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
-            event.setOrganizers(null);
-            event.setPlace(null);
-            event.setParticipants(null);
+//            event.setOrganizers(null);
+            //event.getOrganizers().stream().forEach(club -> club.getEvents().remove(event));
+//            event.setPlace(null); //ManyToOne
+//            event.setParticipants(null);
 
             eventRepository.delete(event);
             return true;

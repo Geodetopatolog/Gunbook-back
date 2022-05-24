@@ -20,6 +20,9 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id_club")
 public class Club {
 
+    //todo dodanie pola z listą oczekujących i przerobienie serwisu
+    //todo dorobienie kontrolera odwrotnego do ClubMembersController, chodzi o rodzielenie sytuacji gdy o dołączenie prosi osoba a kiedy kogoś sam dodaje klub
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_club;
@@ -27,6 +30,7 @@ public class Club {
     private String logoURL = "";
     private String name = "";
     private String description = "";
+    private String email;
 
     @ManyToMany(mappedBy = "ownedClubs")
     private List<Person> owners;

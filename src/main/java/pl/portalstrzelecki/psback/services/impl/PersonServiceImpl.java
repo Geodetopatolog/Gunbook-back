@@ -26,9 +26,8 @@ public class PersonServiceImpl implements PersonService {
         Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
-            person.setOwnedClubs(null);
-            person.setOwnedClubs(null);
-            person.getEventsJoined().stream().forEach(event -> event.setParticipants(null));
+
+            person.getEventsJoined().stream().forEach(event -> event.getParticipants().remove(person));
 
             personRepository.delete(person);
             return true;
