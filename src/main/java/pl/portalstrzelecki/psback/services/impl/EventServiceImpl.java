@@ -23,9 +23,15 @@ public class EventServiceImpl implements EventService {
 
 //podstawowe------------------------------------------------------------
     @Override
-    public void saveEvent(Event event) {
+    public void saveEvent(Event event, String rangeName) {
         event.setId_event(null);
-        eventRepository.save(event);
+
+        if (rangeName!=null) {
+            addEventRange(event, rangeName);
+        } else {
+            eventRepository.save(event);
+        }
+
     }
 
     @Override
@@ -34,10 +40,6 @@ public class EventServiceImpl implements EventService {
 
         if(optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
-//            event.setOrganizers(null);
-            //event.getOrganizers().stream().forEach(club -> club.getEvents().remove(event));
-//            event.setPlace(null); //ManyToOne
-//            event.setParticipants(null);
 
             eventRepository.delete(event);
             return true;
@@ -142,15 +144,33 @@ public class EventServiceImpl implements EventService {
             Event event = optionalEvent.get();
             ShootingRange shootingRange = optionalShootingRange.get();
 
-                event.setPlace(shootingRange);
-                shootingRange.addEvent(event);
+            event.setPlace(shootingRange);
+            shootingRange.addEvent(event);
 
-                eventRepository.save(event);
-                shootingRangeRepository.save(shootingRange);
-                return true;
+            eventRepository.save(event);
+            shootingRangeRepository.save(shootingRange);
+            return true;
 
         } else return false;
     }
+
+    @Override
+    public boolean addEventRange(Event event, String range_name) {
+        Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findByName(range_name);
+
+        if (optionalShootingRange.isPresent()) {
+            ShootingRange shootingRange = optionalShootingRange.get();
+
+            event.setPlace(shootingRange);
+            shootingRange.addEvent(event);
+
+            eventRepository.save(event);
+            shootingRangeRepository.save(shootingRange);
+            return true;
+
+        } else return false;
+    }
+
 
     @Override
     public boolean deleteEventRange(Long id_event, Long id_range) {

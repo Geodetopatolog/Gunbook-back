@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.component.mailer.Mailer;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ClubController {
@@ -28,22 +28,26 @@ public class ClubController {
         clubService.saveClub(ClubMapper.INSTANCE.ClubDtoToClub(clubDTO));
     }
 
+
     @GetMapping("/club")
-    public @ResponseBody ClubDTO getClubById(@RequestBody(required = false) Map<String, Long> json,
-                                             @RequestParam (name="name") Optional<String> name) {
+//    public @ResponseBody ClubDTO getClubById(@RequestBody(required = false) Map<String, Long> json,
+//                                             @RequestParam (name="name") Optional<String> name) {
+    public @ResponseBody ClubDTO getClubById(@RequestParam Long id_club) {
+
 //todo dokładnie jak ma wyglądać przekazywanie parametrów do wyszukiwania, ustali się jak będę robił frontend :)
 // to tutaj to taki ładny kontroler, jak ustalę sposób przekazywania parametrów, to wszystkie ładnie pozmieniam
-        Optional<Club> optionalClub;
 
-        if (name.isPresent()) {
-             optionalClub = clubService.getClubByName(name.get());
-            } else if (json != null && json.containsKey("id_club")) {
-            Long id_club = json.get("id_club");
-            optionalClub = clubService.getClubById(id_club);
-            } else {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Niepoprawne dane wejściowe");
-        }
+//        if (name.isPresent()) {
+//             optionalClub = clubService.getClubByName(name.get());
+//            } else if (json != null && json.containsKey("id_club")) {
+//            Long id_club = json.get("id_club");
+//            optionalClub = clubService.getClubById(id_club);
+//            } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.BAD_REQUEST, "Niepoprawne dane wejściowe");
+//        }
+
+        Optional<Club> optionalClub = clubService.getClubById(id_club);
 
         if (optionalClub.isPresent()) {
             return ClubMapper.INSTANCE.ClubToClubDto(optionalClub.get());

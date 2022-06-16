@@ -17,4 +17,6 @@ public interface ShootingRangeService {
     boolean addClub(Long id_range, Long id_club);
 
     boolean deleteRangeClub(Long id_range, Long id_club);
+
+    Optional<ShootingRange> getShootingRangeByName(String name);
 }

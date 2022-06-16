@@ -27,7 +27,7 @@ public class PersonServiceImpl implements PersonService {
         if(optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
 
-            person.getEventsJoined().stream().forEach(event -> event.getParticipants().remove(person));
+            person.getEventsJoined().forEach(event -> event.getParticipants().remove(person));
 
             personRepository.delete(person);
             return true;
@@ -52,8 +52,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Optional<Person> getPersonById(long id) {
-        Optional<Person> optionalPerson = personRepository.findById(id);
-            return optionalPerson;
+        return personRepository.findById(id);
     }
 
     @Override
@@ -61,10 +60,10 @@ public class PersonServiceImpl implements PersonService {
         return (List<Person>) personRepository.findAll();
     }
 
-    @Override
-    public List<Person> getPersonWithNameEqualsRafal() {
-        return personRepository.getPersonWithNameEqualsRafal();
-    }
+   // @Override
+   // public List<Person> getPersonWithNameEqualsRafal() {
+    //    return personRepository.getPersonWithNameEqualsRafal();
+    //}
 
     @Override
     public List<Person> getPersonWithNameEquals(String name) {

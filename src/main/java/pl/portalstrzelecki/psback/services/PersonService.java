@@ -14,8 +14,7 @@ public interface PersonService {
 
     List<Person> getAllPersons();
 
-    public List<Person> getPersonWithNameEqualsRafal();
-    public List<Person> getPersonWithNameEquals(String name);
+    List<Person> getPersonWithNameEquals(String name);
 
 
 

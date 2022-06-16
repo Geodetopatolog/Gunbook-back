@@ -36,13 +36,13 @@ public class Club {
     private List<Person> owners;
 
     @ManyToMany(mappedBy = "clubs")
-    private List<Person> members = new ArrayList<>();;
+    private List<Person> members = new ArrayList<>();
 
     @ManyToMany (mappedBy = "clubs")
     private List<ShootingRange> ranges = new ArrayList<>();
 
     @ManyToMany (mappedBy = "organizers")
-    private List<Event> events = new ArrayList<>();;
+    private List<Event> events = new ArrayList<>();
 
     private boolean sport=false;
     private boolean fun=false;
@@ -56,15 +56,15 @@ public class Club {
         return super.toString();
     }
 
-    public Club updateClub(Club club) {
-        this.logoURL = club.getLogoURL();
-        this.name = club.getName();
-        this.description = club.getDescription();
-        this.sport = club.isSport();
-        this.fun = club.isFun();
-        this.cours = club.isCours();
-        return this;
-    }
+//    public Club updateClub(Club club) {
+//        this.logoURL = club.getLogoURL();
+//        this.name = club.getName();
+//        this.description = club.getDescription();
+//        this.sport = club.isSport();
+//        this.fun = club.isFun();
+//        this.cours = club.isCours();
+//        return this;
+//    }
 
     public void addMember(Person member) {
         members.add(member);
@@ -98,10 +98,10 @@ public class Club {
         owners.remove(person);
     }
 
-    public void prepareToDelete() {
-        this.events = null;
-        this.owners = null;
-        this.members = null;
-        this.ranges = null;
-    }
+//    public void prepareToDelete() {
+//        this.events = null;
+//        this.owners = null;
+//        this.members = null;
+//        this.ranges = null;
+//    }
 }

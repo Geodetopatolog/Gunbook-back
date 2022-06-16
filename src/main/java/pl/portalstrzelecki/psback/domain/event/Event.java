@@ -73,14 +73,6 @@ public class Event {
         this.setOrganizers(null);
     }
 
-    public void resetPlace() {
-        this.setPlace(null);
-    }
-
-    public void addRange(ShootingRange shootingRange) {
-
-    }
-
     public void addOrganizer(Club club) {
         this.organizers.add(club);
     }
@@ -91,7 +83,7 @@ public class Event {
             messageList.add("Nie przypisano organizatorów");
             return messageList;
         } else {
-            return organizers.stream().map(club -> club.getName()).collect(Collectors.toList());
+            return organizers.stream().map(Club::getName).collect(Collectors.toList());
         }
     }
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface EventService {
 
-    void saveEvent(Event event);
+    void saveEvent(Event event, String rangeName);
     boolean deleteEvent(Long id);
     boolean updateEvent(Event event);
     Optional<Event> getEventById(long id);
@@ -22,6 +22,6 @@ public interface EventService {
     Optional<ShootingRange> getPlace(Long id_event);
 
     boolean addEventRange(Long id_event, Long id_range);
-
+    boolean addEventRange(Event event, String range);
     boolean deleteEventRange(Long id_event, Long id_range);
 }

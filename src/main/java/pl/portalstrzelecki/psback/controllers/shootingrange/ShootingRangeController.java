@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeNameDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ShootingRangeController {
@@ -29,8 +31,8 @@ public class ShootingRangeController {
     }
 
     @GetMapping("/range")
-    public @ResponseBody ShootingRangeDTO getShootingRangeById(@RequestBody Map<String, Long> json) {
-        Long id_range = json.get("id_range");
+    public @ResponseBody ShootingRangeDTO getShootingRangeById(@RequestParam Long id_range) {
+
         Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(id_range);
 
         if (optionalShootingRange.isPresent()) {
@@ -40,6 +42,22 @@ public class ShootingRangeController {
                     HttpStatus.NOT_FOUND, "entity not found");
         }
     }
+
+
+    @GetMapping("/rangebyname")
+    public @ResponseBody ShootingRangeDTO getShootingRangeById(@RequestParam String name) {
+
+        Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeByName(name);
+
+        if (optionalShootingRange.isPresent()) {
+            return ShootingRangeMapper.INSTANCE.ShootingRangeToShootingRangeDTO(optionalShootingRange.get());
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
+
+
 
     @PatchMapping("/range")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -71,10 +89,21 @@ public class ShootingRangeController {
     }
 
     @GetMapping("/ranges")
-    public @ResponseBody
-    List<ShootingRangeDTO> getAllShootingRanges() {
+    public @ResponseBody List<ShootingRangeDTO> getAllShootingRanges() {
+
         List<ShootingRange> allShootingRanges = shootingRangeService.getAllShootingRanges();
+
         return ShootingRangeMapper.INSTANCE.ShootingRangesToShootingRangeDtos(allShootingRanges);
+
+    }
+
+    @GetMapping("/rangesnames")
+    public @ResponseBody List<ShootingRangeNameDTO> getAllShootingRangesNames() {
+
+        List<ShootingRange> allShootingRanges = shootingRangeService.getAllShootingRanges();
+
+        return ShootingRangeMapper.INSTANCE.ShootingRangesToShootingRangeNameDTOs(allShootingRanges);
+
     }
 
 

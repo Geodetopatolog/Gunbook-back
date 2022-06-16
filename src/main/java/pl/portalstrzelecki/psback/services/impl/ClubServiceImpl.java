@@ -37,10 +37,10 @@ public class ClubServiceImpl implements ClubService {
         if(optionalClub.isPresent()) {
             Club club = optionalClub.get();
             //jeśli w polu danej klasy mamy MappedBy to trzeba usuwać po stronie obiektu konkretny obiekt w tabeli
-            club.getMembers().stream().forEach(person -> person.getClubs().remove(club));
-            club.getEvents().stream().forEach(event -> event.getOrganizers().remove(club));
-            club.getRanges().stream().forEach(shootingRange -> shootingRange.getClubs().remove(club));
-            club.getOwners().stream().forEach(person -> person.getOwnedClubs().remove(club));
+            club.getMembers().forEach(person -> person.getClubs().remove(club));
+            club.getEvents().forEach(event -> event.getOrganizers().remove(club));
+            club.getRanges().forEach(shootingRange -> shootingRange.getClubs().remove(club));
+            club.getOwners().forEach(person -> person.getOwnedClubs().remove(club));
 
             clubRepository.delete(club);
             return true;
@@ -64,15 +64,13 @@ public class ClubServiceImpl implements ClubService {
     }
     @Override
     public Optional<Club> getClubById(long id) {
-         Optional<Club> optionalClub = clubRepository.findById(id);
         //System.out.println("znalazłem klub " + optionalClub.get());
-        return optionalClub;
+        return clubRepository.findById(id);
     }
 
     @Override
     public Optional<Club> getClubByName(String name) {
-        Optional<Club> optionalClub = clubRepository.getClubByName(name);
-        return optionalClub;
+        return clubRepository.getClubByName(name);
     }
 
 

@@ -26,7 +26,7 @@ public class EventDTO {
     private boolean isCourse;
 
     public boolean notNull() {
-        if (
+        return !(
             id_event == null ||
             name == null ||
             description  == null ||
@@ -34,13 +34,7 @@ public class EventDTO {
             dateOfEnd  == null ||
             hourOfEnd  == null ||
             hourOfStart  == null ||
-            entryFee  == null
-        ) {
-            return false;
-        } else {
-            return true;
-        }
-
+            entryFee  == null);
     }
 
 

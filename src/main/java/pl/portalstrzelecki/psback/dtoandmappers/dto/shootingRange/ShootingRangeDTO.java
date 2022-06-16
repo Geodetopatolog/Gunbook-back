@@ -11,16 +11,12 @@ public class ShootingRangeDTO {
     private String adress;
 
     public boolean notNull() {
-        if (
+        return !(
                 id_shootingrange == null ||
                 name == null ||
                 description == null ||
                 adress == null
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+        );
     }
 
 

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class EventController {
@@ -24,12 +25,14 @@ public class EventController {
     @PostMapping("/event")
     @ResponseStatus(HttpStatus.CREATED)
     public void createEvent(@RequestBody EventDTO eventDTO) {
-        eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO));
+
+        //System.out.println(eventDTO);
+        eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO), eventDTO.getRange());
+        //eventService.addEventRange(eventDTO.getRange());
     }
 
     @GetMapping("/event")
-    public @ResponseBody EventDTO getEventById(@RequestBody Map<String, Long> json) {
-        Long id_event = json.get("id_event");
+    public @ResponseBody EventDTO getEventById(@RequestParam Long id_event) {
 
         Optional<Event> optionalEvent = eventService.getEventById(id_event);
 

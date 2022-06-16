@@ -31,7 +31,7 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
         if(optionalShootingRange.isPresent()) {
             ShootingRange shootingRange = optionalShootingRange.get();
 
-            shootingRange.getEvents().stream().forEach(event -> event.setPlace(null));
+            shootingRange.getEvents().forEach(event -> event.setPlace(null));
 
             shootingRangeRepository.delete(shootingRange);
             return true;
@@ -56,8 +56,7 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
     @Override
     public Optional<ShootingRange> getShootingRangeById(long id) {
 
-        Optional <ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id);
-        return optionalShootingRange;
+        return shootingRangeRepository.findById(id);
     }
 
     @Override
@@ -108,5 +107,10 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
             } else return false;
         } else return false;
 
+    }
+
+    @Override
+    public Optional<ShootingRange> getShootingRangeByName(String name) {
+        return shootingRangeRepository.findByName(name);
     }
 }

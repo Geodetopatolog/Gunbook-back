@@ -27,6 +27,8 @@ public class PersonController {
         personService.savePerson(PersonMapper.INSTANCE.PersonDtoToPerson(personDTO));
     }
 
+
+    //todo przerobić wszystkie metody Get na @RequestParam
     @CrossOrigin
     @GetMapping("/person")
 //    public @ResponseBody PersonDTO getPersonById(@RequestBody Map<String, Long> json)

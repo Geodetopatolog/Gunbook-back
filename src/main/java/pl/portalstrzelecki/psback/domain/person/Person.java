@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
-import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -58,15 +57,6 @@ public class Person {
     public String toString() {
         return super.toString();
     }
-
-//
-//    public Person updatePerson(Person person) {
-//        this.setName(person.getName());
-//        this.setSurname(person.getSurname());
-//        this.setNick(person.getNick());
-//        this.setDescription(person.getDescription());
-//        return this;
-//    }
 
     public void resetClub() {
         this.setClubs(null);

@@ -37,9 +37,9 @@ public class EventShootingRangeController {
     }
 
     @PatchMapping("/event_range")
-    public ResponseEntity<?> addEventRange(@RequestBody Map<String, Long> json) {
-        Long id_range = json.get("id_range");
-        Long id_event = json.get("id_event");
+    public ResponseEntity<?> addEventRange(@RequestParam Long id_range, Long id_event) {
+//        Long id_range = json.get("id_range");
+//        Long id_event = json.get("id_event");
 
 
         if (id_event != null && id_range != null) {
