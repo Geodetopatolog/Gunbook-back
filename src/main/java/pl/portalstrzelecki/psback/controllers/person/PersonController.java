@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.portalstrzelecki.psback.domain.Authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
 import pl.portalstrzelecki.psback.services.PersonService;
+import pl.portalstrzelecki.psback.services.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,8 @@ import java.util.Optional;
 public class PersonController {
 
     private final PersonService personService;
+
+    private final UserService userService;
 
     @CrossOrigin
     @PostMapping("/person")
@@ -34,6 +38,36 @@ public class PersonController {
 //    public @ResponseBody PersonDTO getPersonById(@RequestBody Map<String, Long> json)
     public @ResponseBody PersonDTO getPersonById(@RequestParam Long id_person)
     {
+        userService.saveUser(UserData.builder()
+                        .isUser(true)
+                        .isActive(true)
+                        .isAdmin(true)
+                        .isGod(true)
+                        .password("haslo")
+                        .username("god")
+                        .person(personService.getPersonById(3).get())
+                        .build());
+
+        userService.saveUser(UserData.builder()
+                .isUser(true)
+                .isActive(true)
+                .isAdmin(true)
+                .isGod(false)
+                .password("haslo")
+                .username("admin")
+                .person(personService.getPersonById(5).get())
+                .build());
+
+        userService.saveUser(UserData.builder()
+                .isUser(true)
+                .isActive(true)
+                .isAdmin(false)
+                .isGod(false)
+                .password("haslo")
+                .username("user")
+                .person(personService.getPersonById(8).get())
+                .build());
+
 //        Long id_person = json.get("id_person");
         Optional<Person> optionalPerson = personService.getPersonById(id_person);
         if (optionalPerson.isPresent()) {
@@ -42,6 +76,8 @@ public class PersonController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
         }
+
+
     }
 
     @PatchMapping("/person")

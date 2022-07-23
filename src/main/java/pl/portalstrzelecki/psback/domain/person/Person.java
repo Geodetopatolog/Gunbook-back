@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import pl.portalstrzelecki.psback.domain.Authentication.UserData;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 
@@ -29,6 +30,9 @@ public class Person {
     private String nick = "";
     private String description = "";
     private String email;
+
+    @OneToOne
+    private UserData userData;
 
     @ManyToMany
     @JoinTable(
