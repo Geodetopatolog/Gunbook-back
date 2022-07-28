@@ -31,7 +31,7 @@ public class Person {
     private String description = "";
     private String email;
 
-    @OneToOne
+    @OneToOne (cascade=CascadeType.ALL)
     private UserData userData;
 
     @ManyToMany

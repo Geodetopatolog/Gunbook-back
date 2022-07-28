@@ -8,7 +8,9 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.Authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonRegistrationDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonRegistrationMapper;
 import pl.portalstrzelecki.psback.services.PersonService;
 import pl.portalstrzelecki.psback.services.UserService;
 
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class PersonController {
@@ -27,8 +30,14 @@ public class PersonController {
     @CrossOrigin
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addPerson(@RequestBody PersonDTO personDTO) {
-        personService.savePerson(PersonMapper.INSTANCE.PersonDtoToPerson(personDTO));
+    public void addPerson(@RequestBody PersonRegistrationDTO personRegistrationDTO) {
+
+        System.out.println(personRegistrationDTO);
+        System.out.println(PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToPerson(personRegistrationDTO).toString());
+        System.out.println(PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToUserData(personRegistrationDTO));
+
+        personService.savePerson(PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToPerson(personRegistrationDTO)
+                ,PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToUserData(personRegistrationDTO));
     }
 
 
@@ -38,37 +47,40 @@ public class PersonController {
 //    public @ResponseBody PersonDTO getPersonById(@RequestBody Map<String, Long> json)
     public @ResponseBody PersonDTO getPersonById(@RequestParam Long id_person)
     {
-        userService.saveUser(UserData.builder()
-                        .isUser(true)
-                        .isActive(true)
-                        .isAdmin(true)
-                        .isGod(true)
-                        .password("haslo")
-                        .username("god")
-                        .person(personService.getPersonById(3).get())
-                        .build());
-
-        userService.saveUser(UserData.builder()
-                .isUser(true)
-                .isActive(true)
-                .isAdmin(true)
-                .isGod(false)
-                .password("haslo")
-                .username("admin")
-                .person(personService.getPersonById(5).get())
-                .build());
-
-        userService.saveUser(UserData.builder()
-                .isUser(true)
-                .isActive(true)
-                .isAdmin(false)
-                .isGod(false)
-                .password("haslo")
-                .username("user")
-                .person(personService.getPersonById(8).get())
-                .build());
+//        userService.saveUser(UserData.builder()
+//                        .isUser(true)
+//                        .isActive(true)
+//                        .isAdmin(true)
+//                        .isGod(true)
+//                        .password("haslo")
+//                        .username("god")
+//                        .person(personService.getPersonById(3).get())
+//                        .build());
+//
+//        userService.saveUser(UserData.builder()
+//                .isUser(true)
+//                .isActive(true)
+//                .isAdmin(true)
+//                .isGod(false)
+//                .password("haslo")
+//                .username("admin")
+//                .person(personService.getPersonById(5).get())
+//                .build());
+//
+//        userService.saveUser(UserData.builder()
+//                .isUser(true)
+//                .isActive(true)
+//                .isAdmin(false)
+//                .isGod(false)
+//                .password("haslo")
+//                .username("user")
+//                .person(personService.getPersonById(8).get())
+//                .build());
 
 //        Long id_person = json.get("id_person");
+
+        System.out.println("działam");
+
         Optional<Person> optionalPerson = personService.getPersonById(id_person);
         if (optionalPerson.isPresent()) {
             return PersonMapper.INSTANCE.PersonToPersonDto(optionalPerson.get());

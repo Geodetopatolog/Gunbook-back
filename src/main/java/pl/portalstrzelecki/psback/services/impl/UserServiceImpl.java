@@ -1,6 +1,8 @@
 package pl.portalstrzelecki.psback.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.portalstrzelecki.psback.domain.Authentication.UserData;
 import pl.portalstrzelecki.psback.repositories.UserRepository;
@@ -14,9 +16,10 @@ public class UserServiceImpl implements UserService {
 
 final UserRepository userRepository;
 
-
     @Override
     public void saveUser(UserData userData) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userData.setEncryptedPassword(passwordEncoder.encode(userData.getPassword()));
         userRepository.save(userData);
     }
 
@@ -50,4 +53,5 @@ final UserRepository userRepository;
     public Optional<UserData> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
 }

@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Data
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class UserData {
 
@@ -17,14 +16,19 @@ public class UserData {
     private Long id_user;
 
     private String username;
+    @Transient
     private String password;
-    private boolean isActive = false;
-    private boolean isUser = false;
+    private String encryptedPassword;
+    private boolean isActive = true;
+    private boolean isUser = true;
     private boolean isAdmin = false;
     private boolean isGod = false;
 
-    @OneToOne
+    @OneToOne (cascade=CascadeType.ALL)
     private Person person;
 
+    public UserData() {
 
+
+    }
 }

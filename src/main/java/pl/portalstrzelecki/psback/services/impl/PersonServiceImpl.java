@@ -2,9 +2,12 @@ package pl.portalstrzelecki.psback.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.portalstrzelecki.psback.domain.Authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
+import pl.portalstrzelecki.psback.repositories.UserRepository;
 import pl.portalstrzelecki.psback.services.PersonService;
+import pl.portalstrzelecki.psback.services.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +18,15 @@ public class PersonServiceImpl implements PersonService {
 
     final PersonRepository personRepository;
 
+    final UserService userService;
+
     @Override
-    public void savePerson(Person person) {
+    public void savePerson(Person person, UserData userData) {
         person.setId_person(null);
+        userData.setPerson(person);
+        userService.saveUser(userData);
+
+        person.setUserData(userData);
         personRepository.save(person);
     }
 

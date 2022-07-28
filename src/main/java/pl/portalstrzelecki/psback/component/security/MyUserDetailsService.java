@@ -46,7 +46,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
             userDetails = User.withUsername(userData.getUsername())
                 .username(userData.getUsername())
-                .password(userData.getPassword())
+                .password(userData.getEncryptedPassword())
                 .authorities(roles)
                 .build();
 
@@ -54,6 +54,9 @@ public class MyUserDetailsService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("Nie znaleziono kolesia :(");
         }
-
     }
+
+
+
+
 }

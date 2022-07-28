@@ -14,5 +14,7 @@ public interface UserService {
 
     public Optional<UserData> getUserByUsername(String username);
 
+//    public void encodePassword(UserData userData);
+
 
 }
