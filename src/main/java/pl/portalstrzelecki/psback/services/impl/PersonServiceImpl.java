@@ -2,10 +2,9 @@ package pl.portalstrzelecki.psback.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.portalstrzelecki.psback.domain.Authentication.UserData;
+import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
-import pl.portalstrzelecki.psback.repositories.UserRepository;
 import pl.portalstrzelecki.psback.services.PersonService;
 import pl.portalstrzelecki.psback.services.UserService;
 

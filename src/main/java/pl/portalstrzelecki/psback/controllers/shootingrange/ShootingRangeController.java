@@ -88,7 +88,7 @@ public class ShootingRangeController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/ranges")
+    @GetMapping("/range/all")
     public @ResponseBody List<ShootingRangeDTO> getAllShootingRanges() {
 
         List<ShootingRange> allShootingRanges = shootingRangeService.getAllShootingRanges();
@@ -97,7 +97,7 @@ public class ShootingRangeController {
 
     }
 
-    @GetMapping("/rangesnames")
+    @GetMapping("/range/ranges_names")
     public @ResponseBody List<ShootingRangeNameDTO> getAllShootingRangesNames() {
 
         List<ShootingRange> allShootingRanges = shootingRangeService.getAllShootingRanges();

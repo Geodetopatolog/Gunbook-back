@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import pl.portalstrzelecki.psback.domain.Authentication.UserData;
+import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 

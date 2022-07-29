@@ -1,6 +1,6 @@
 package pl.portalstrzelecki.psback.services;
 
-import pl.portalstrzelecki.psback.domain.Authentication.UserData;
+import pl.portalstrzelecki.psback.domain.authentication.UserData;
 
 import java.util.Optional;
 

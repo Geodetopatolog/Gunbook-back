@@ -1,4 +1,4 @@
-package pl.portalstrzelecki.psback.domain.Authentication;
+package pl.portalstrzelecki.psback.domain.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -2,7 +2,7 @@ package pl.portalstrzelecki.psback.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.portalstrzelecki.psback.component.clubmail.ClubMail;
+import pl.portalstrzelecki.psback.component.mailer.clubmail.ClubMail;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;

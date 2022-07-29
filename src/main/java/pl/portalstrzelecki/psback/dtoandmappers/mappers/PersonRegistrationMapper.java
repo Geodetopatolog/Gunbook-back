@@ -3,9 +3,8 @@ package pl.portalstrzelecki.psback.dtoandmappers.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import pl.portalstrzelecki.psback.domain.Authentication.UserData;
+import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
-import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonRegistrationDTO;
 
 @Mapper

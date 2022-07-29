@@ -19,7 +19,7 @@ public class ShootingRangeClubsController {
     private final ShootingRangeService shootingRangeService;
 
 
-    @GetMapping("/range_clubs")
+    @GetMapping("/range/clubs")
     public List<ClubDTO> getClubRanges(@RequestBody Map<String, Long> json) {
 
         Long id_range = json.get("id_range");
@@ -29,7 +29,7 @@ public class ShootingRangeClubsController {
     }
 
 
-    @PatchMapping("/range_clubs")
+    @PatchMapping("/range/clubs")
     public ResponseEntity<?> addClubRange(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
         Long id_range = json.get("id_range");
@@ -46,7 +46,7 @@ public class ShootingRangeClubsController {
         }
     }
 
-    @DeleteMapping("/range_clubs")
+    @DeleteMapping("/range/clubs")
     public ResponseEntity<?> deleteClubRange(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
         Long id_range = json.get("id_range");

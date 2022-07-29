@@ -70,7 +70,7 @@ public class EventController {
         }
     }
 
-    @GetMapping("/events")
+    @GetMapping("/event/all")
     public @ResponseBody
     List<EventDTO> getAllEvents() {
         return EventMapper.INSTANCE.EventsToEventDtos(eventService.getAllEvents());

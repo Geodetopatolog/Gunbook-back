@@ -20,7 +20,7 @@ public class EventShootingRangeController {
     private final EventService eventService;
 
 
-    @GetMapping("event_range")
+    @GetMapping("event/range")
     public ShootingRangeDTO getEventRange(@RequestBody Map<String, Long> json) {
 
         Long id_event = json.get("id_event");
@@ -36,7 +36,7 @@ public class EventShootingRangeController {
         }
     }
 
-    @PatchMapping("/event_range")
+    @PatchMapping("/event/range")
     public ResponseEntity<?> addEventRange(@RequestParam Long id_range, Long id_event) {
 //        Long id_range = json.get("id_range");
 //        Long id_event = json.get("id_event");
@@ -53,7 +53,7 @@ public class EventShootingRangeController {
         }
     }
 
-    @DeleteMapping("/event_range")
+    @DeleteMapping("/event/range")
     public ResponseEntity<?> deleteEventRange(@RequestBody Map<String, Long> json) {
         Long id_range = json.get("id_range");
         Long id_event = json.get("id_event");

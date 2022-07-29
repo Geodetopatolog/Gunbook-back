@@ -19,7 +19,7 @@ public class ClubEventsController {
 
     private final ClubService clubService;
 
-    @GetMapping("club_events")
+    @GetMapping("club/events_organized")
     public List<EventDTO> getClubEvents(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
 
@@ -33,7 +33,7 @@ public class ClubEventsController {
         }
     }
 
-    @PatchMapping("/club_events")
+    @PatchMapping("/club/events_organized")
     public ResponseEntity<?> addClubEvents(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
         Long id_event = json.get("id_event");
@@ -50,7 +50,7 @@ public class ClubEventsController {
         }
     }
 
-    @DeleteMapping("/club_events")
+    @DeleteMapping("/club/events_organized")
     public ResponseEntity<?> deleteClubEvent(@RequestBody Map<String, Long> json) {
         Long id_club = json.get("id_club");
         Long id_event = json.get("id_event");

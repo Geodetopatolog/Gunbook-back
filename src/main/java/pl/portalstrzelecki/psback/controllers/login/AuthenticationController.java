@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.portalstrzelecki.psback.component.security.JwtUtil;
 import pl.portalstrzelecki.psback.component.security.MyUserDetailsService;
-import pl.portalstrzelecki.psback.domain.Authentication.AuthenticationRequest;
-import pl.portalstrzelecki.psback.domain.Authentication.AuthenticationResponse;
-import pl.portalstrzelecki.psback.domain.Authentication.UserData;
+import pl.portalstrzelecki.psback.domain.authentication.AuthenticationRequest;
+import pl.portalstrzelecki.psback.domain.authentication.AuthenticationResponse;
+import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.services.UserService;
 

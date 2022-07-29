@@ -30,22 +30,10 @@ public class ClubController {
 
 
     @GetMapping("/club")
-//    public @ResponseBody ClubDTO getClubById(@RequestBody(required = false) Map<String, Long> json,
-//                                             @RequestParam (name="name") Optional<String> name) {
     public @ResponseBody ClubDTO getClubById(@RequestParam Long id_club) {
 
 //todo dokładnie jak ma wyglądać przekazywanie parametrów do wyszukiwania, ustali się jak będę robił frontend :)
 // to tutaj to taki ładny kontroler, jak ustalę sposób przekazywania parametrów, to wszystkie ładnie pozmieniam
-
-//        if (name.isPresent()) {
-//             optionalClub = clubService.getClubByName(name.get());
-//            } else if (json != null && json.containsKey("id_club")) {
-//            Long id_club = json.get("id_club");
-//            optionalClub = clubService.getClubById(id_club);
-//            } else {
-//            throw new ResponseStatusException(
-//                    HttpStatus.BAD_REQUEST, "Niepoprawne dane wejściowe");
-//        }
 
         Optional<Club> optionalClub = clubService.getClubById(id_club);
 
@@ -87,7 +75,7 @@ public class ClubController {
         }
     }
 
-    @GetMapping("/clubs")
+    @GetMapping("/club/all")
     public @ResponseBody
     List<ClubDTO> getAllClubs() {
         return ClubMapper.INSTANCE.ClubToClubDtos(clubService.getAllClubs());

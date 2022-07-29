@@ -5,14 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.domain.Authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonRegistrationDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonRegistrationMapper;
 import pl.portalstrzelecki.psback.services.PersonService;
-import pl.portalstrzelecki.psback.services.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,7 @@ public class PersonController {
 
     private final PersonService personService;
 
-    private final UserService userService;
+//    private final UserService userService;
 
     @CrossOrigin
     @PostMapping("/person")
@@ -42,9 +40,9 @@ public class PersonController {
 
 
     //todo przerobić wszystkie metody Get na @RequestParam
+    //todo przerobić endpointy do schematu /person/joined_events zamiast /person_joinedevents
     @CrossOrigin
     @GetMapping("/person")
-//    public @ResponseBody PersonDTO getPersonById(@RequestBody Map<String, Long> json)
     public @ResponseBody PersonDTO getPersonById(@RequestParam Long id_person)
     {
 //        userService.saveUser(UserData.builder()
@@ -76,10 +74,6 @@ public class PersonController {
 //                .username("user")
 //                .person(personService.getPersonById(8).get())
 //                .build());
-
-//        Long id_person = json.get("id_person");
-
-        System.out.println("działam");
 
         Optional<Person> optionalPerson = personService.getPersonById(id_person);
         if (optionalPerson.isPresent()) {

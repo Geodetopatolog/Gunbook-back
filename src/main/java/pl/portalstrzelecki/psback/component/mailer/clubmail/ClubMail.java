@@ -1,4 +1,4 @@
-package pl.portalstrzelecki.psback.component.clubmail;
+package pl.portalstrzelecki.psback.component.mailer.clubmail;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
