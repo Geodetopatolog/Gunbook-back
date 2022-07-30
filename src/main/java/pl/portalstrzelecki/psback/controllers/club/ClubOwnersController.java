@@ -20,9 +20,7 @@ public class ClubOwnersController {
     private final ClubService clubService;
 
     @GetMapping("/club/owners")
-    public List<PersonDTO> getClubOwners(@RequestBody Map<String, Long> json) {
-
-        Long id_club = json.get("id_club");
+    public List<PersonDTO> getClubOwners(@RequestParam Long id_club) {
 
         List<Person> clubOwners = clubService.getClubOwners(id_club);
 
@@ -35,9 +33,7 @@ public class ClubOwnersController {
     }
 
     @PatchMapping("/club/owners")
-    public ResponseEntity<?> addClubOwner(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> addClubOwner(@RequestParam Long id_club, Long id_person) {
 
         if (id_person != null && id_club != null) {
             boolean anyOwnerAdded = clubService.addOwner(id_person, id_club);
@@ -52,9 +48,7 @@ public class ClubOwnersController {
     }
 
     @DeleteMapping("/club/owners")
-    public ResponseEntity<?> deleteClubOwner(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> deleteClubOwner(@RequestParam Long id_club, Long id_person) {
 
         if (id_person != null && id_club != null) {
             boolean anyClubOwnerDelete = clubService.deleteClubOwner(id_person, id_club);
@@ -68,7 +62,5 @@ public class ClubOwnersController {
             return ResponseEntity.status(417).build();
         }
     }
-
-
 
 }

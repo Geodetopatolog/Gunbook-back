@@ -20,9 +20,7 @@ public class ClubMembersController {
     private final ClubService clubService;
 
     @GetMapping("club/members")
-    public List<PersonDTO> getClubMembers(@RequestBody Map<String, Long> json) {
-
-        Long id_club = json.get("id_club");
+    public List<PersonDTO> getClubMembers(@RequestParam Long id_club) {
 
         List<Person> clubMembers = clubService.getClubMembers(id_club);
 
@@ -35,9 +33,7 @@ public class ClubMembersController {
     }
 
     @PatchMapping("/club/members")
-    public ResponseEntity<?> addMember(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> addMember(@RequestParam Long id_club, Long id_person) {
 
         if (id_person != null && id_club != null) {
             boolean anyMemberAdded = clubService.addClubMember(id_person, id_club);
@@ -51,9 +47,7 @@ public class ClubMembersController {
     }
 
     @DeleteMapping("/club/members")
-    public ResponseEntity<?> deleteClubMember(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> deleteClubMember(@RequestParam Long id_club, Long id_person) {
 
         if (id_person != null && id_club != null) {
             boolean anyMemberRemoved = clubService.deleteClubMember(id_person, id_club);

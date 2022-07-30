@@ -22,6 +22,8 @@ public class PersonEventsController {
 
     private final PersonService personService;
 
+    //todo dodać resztę metod
+
     @GetMapping("/person/joined_events")
     public List<EventDTO> getEventsByPersonId(@RequestParam Long id_person)
     {

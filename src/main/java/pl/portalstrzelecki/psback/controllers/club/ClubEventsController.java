@@ -20,8 +20,7 @@ public class ClubEventsController {
     private final ClubService clubService;
 
     @GetMapping("club/events_organized")
-    public List<EventDTO> getClubEvents(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
+    public List<EventDTO> getClubEvents(@RequestParam Long id_club) {
 
         List<Event> clubEvents = clubService.getClubEvents(id_club);
 
@@ -34,10 +33,7 @@ public class ClubEventsController {
     }
 
     @PatchMapping("/club/events_organized")
-    public ResponseEntity<?> addClubEvents(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_event = json.get("id_event");
-
+    public ResponseEntity<?> addClubEvents(@RequestParam Long id_club, Long id_event) {
 
         if (id_event != null && id_club != null) {
             boolean anyEventAdded = clubService.addClubEvent(id_event, id_club);
@@ -51,9 +47,7 @@ public class ClubEventsController {
     }
 
     @DeleteMapping("/club/events_organized")
-    public ResponseEntity<?> deleteClubEvent(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_event = json.get("id_event");
+    public ResponseEntity<?> deleteClubEvent(@RequestParam Long id_club, Long id_event) {
 
         if (id_event != null && id_club != null) {
             boolean anyEventRemoved = clubService.deleteClubEvent(id_event, id_club);

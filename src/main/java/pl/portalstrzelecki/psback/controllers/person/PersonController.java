@@ -39,8 +39,6 @@ public class PersonController {
     }
 
 
-    //todo przerobić wszystkie metody Get na @RequestParam
-    //todo przerobić endpointy do schematu /person/joined_events zamiast /person_joinedevents
     @CrossOrigin
     @GetMapping("/person")
     public @ResponseBody PersonDTO getPersonById(@RequestParam Long id_person)
@@ -83,7 +81,6 @@ public class PersonController {
                     HttpStatus.NOT_FOUND, "entity not found");
         }
 
-
     }
 
     @PatchMapping("/person")
@@ -101,8 +98,8 @@ public class PersonController {
     }
 
     @DeleteMapping("/person")
-    public ResponseEntity<?> deletePerson(@RequestBody Map<String, Long> json) {
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> deletePerson(@RequestParam Long id_person) {
+
         boolean anyPersonRemoved = personService.deletePerson(id_person);
 
        if (anyPersonRemoved) {
@@ -113,16 +110,12 @@ public class PersonController {
     }
 
 
-    @GetMapping("/persons")
-    public @ResponseBody List<PersonDTO> getAllPersonNamed(@RequestParam(name="name") Optional<String> name) {
+    @GetMapping("/person/all")
+    public @ResponseBody List<PersonDTO> getAllPersonNamed() {
 
-        if (name.isPresent()) {
-            return PersonMapper.INSTANCE.PersonsToPersonDtos(personService.getPersonWithNameEquals(name.get()));
-        }
-        else
-        {
             return PersonMapper.INSTANCE.PersonsToPersonDtos(personService.getAllPersons());
-        }
     }
+
+
 
 }

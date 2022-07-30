@@ -63,8 +63,7 @@ public class ClubController {
     }
 
     @DeleteMapping("/club")
-    public ResponseEntity<?> deleteClub(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
+    public ResponseEntity<?> deleteClub(@RequestParam Long id_club) {
 
         boolean anyClubRemoved = clubService.deleteClub(id_club);
 
@@ -76,8 +75,7 @@ public class ClubController {
     }
 
     @GetMapping("/club/all")
-    public @ResponseBody
-    List<ClubDTO> getAllClubs() {
+    public @ResponseBody List<ClubDTO> getAllClubs() {
         return ClubMapper.INSTANCE.ClubToClubDtos(clubService.getAllClubs());
     }
 

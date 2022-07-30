@@ -24,9 +24,7 @@ public class EventParticipantsController {
 
 
     @GetMapping("/event/participants")
-    public List<PersonDTO> getClubOwners(@RequestBody Map<String, Long> json) {
-
-        Long id_event = json.get("id_event");
+    public List<PersonDTO> getClubOwners(@RequestParam Long id_event) {
 
         Optional<Event> optionalEvent = eventService.getEventById(id_event);
 
@@ -41,9 +39,7 @@ public class EventParticipantsController {
     }
 
     @PatchMapping("/event/participants")
-    public ResponseEntity<?> addClubOwner(@RequestBody Map<String, Long> json) {
-        Long id_event = json.get("id_event");
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> addClubOwner(@RequestParam Long id_event, Long id_person) {
 
         if (id_person != null && id_event != null) {
             boolean anyParticipantAdded = eventService.addEventParticipant(id_person, id_event);
@@ -58,9 +54,7 @@ public class EventParticipantsController {
     }
 
     @DeleteMapping("/event/participants")
-    public ResponseEntity<?> deleteClubOwner(@RequestBody Map<String, Long> json) {
-        Long id_event = json.get("id_event");
-        Long id_person = json.get("id_person");
+    public ResponseEntity<?> deleteClubOwner(@RequestParam Long id_event, Long id_person) {
 
         if (id_person != null && id_event != null) {
             boolean anyEventParticipantDeleted = eventService.deleteEventParticipant(id_person, id_event);

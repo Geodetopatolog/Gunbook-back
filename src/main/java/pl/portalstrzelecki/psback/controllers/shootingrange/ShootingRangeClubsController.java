@@ -20,9 +20,8 @@ public class ShootingRangeClubsController {
 
 
     @GetMapping("/range/clubs")
-    public List<ClubDTO> getClubRanges(@RequestBody Map<String, Long> json) {
+    public List<ClubDTO> getClubRanges(@RequestParam Long id_range) {
 
-        Long id_range = json.get("id_range");
         Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(id_range);
         ShootingRange shootingRange = optionalShootingRange.get();
         return ClubMapper.INSTANCE.ClubToClubDtos(shootingRange.getClubs());
@@ -30,9 +29,7 @@ public class ShootingRangeClubsController {
 
 
     @PatchMapping("/range/clubs")
-    public ResponseEntity<?> addClubRange(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_range = json.get("id_range");
+    public ResponseEntity<?> addClubRange(@RequestParam Long id_club, Long id_range) {
 
         if (id_range != null && id_club != null) {
             boolean anyClubAdded = shootingRangeService.addClub(id_range, id_club);
@@ -47,9 +44,7 @@ public class ShootingRangeClubsController {
     }
 
     @DeleteMapping("/range/clubs")
-    public ResponseEntity<?> deleteClubRange(@RequestBody Map<String, Long> json) {
-        Long id_club = json.get("id_club");
-        Long id_range = json.get("id_range");
+    public ResponseEntity<?> deleteClubRange(@RequestParam Long id_club, Long id_range) {
 
         if (id_range != null && id_club != null) {
             boolean anyRangeClubRemoved = shootingRangeService.deleteRangeClub(id_range, id_club);

@@ -26,9 +26,7 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createEvent(@RequestBody EventDTO eventDTO) {
 
-        //System.out.println(eventDTO);
         eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO), eventDTO.getRange());
-        //eventService.addEventRange(eventDTO.getRange());
     }
 
     @GetMapping("/event")
@@ -59,8 +57,8 @@ public class EventController {
     }
 
     @DeleteMapping("/event")
-    public ResponseEntity<?> deleteEvent(@RequestBody Map<String, Long> json) {
-        Long id_event = json.get("id_event");
+    public ResponseEntity<?> deleteEvent(@RequestParam Long id_event) {
+
         boolean anyEventRemoved = eventService.deleteEvent(id_event);
 
         if (anyEventRemoved) {
@@ -71,8 +69,7 @@ public class EventController {
     }
 
     @GetMapping("/event/all")
-    public @ResponseBody
-    List<EventDTO> getAllEvents() {
+    public @ResponseBody List<EventDTO> getAllEvents() {
         return EventMapper.INSTANCE.EventsToEventDtos(eventService.getAllEvents());
     }
 

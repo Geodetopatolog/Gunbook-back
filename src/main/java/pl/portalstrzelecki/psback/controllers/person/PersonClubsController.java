@@ -34,4 +34,19 @@ public class PersonClubsController {
         }
     }
 
+    @GetMapping("/person/owned_clubs")
+    public List<ClubDTO> getOwnedClubsByPersonId(@RequestParam Long id_person)
+    {
+        Optional<Person> optionalPerson = personService.getPersonById(id_person);
+        if (optionalPerson.isPresent()) {
+            Person person = optionalPerson.get();
+
+            return ClubMapper.INSTANCE.ClubToClubDtos(person.getOwnedClubs());
+
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "person not found");
+        }
+    }
+
 }
