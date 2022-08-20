@@ -35,9 +35,13 @@ public class Event {
     )
     private List<Club> organizers;
 
+    //private List<String> organizersNames;
+
     @ManyToOne
     @JoinColumn(name = "id_shootingrange")
     private ShootingRange place;
+
+    private String rangeName;
 
     @ManyToMany
     @JoinTable(
@@ -47,6 +51,8 @@ public class Event {
     )
     private List<Person> participants = new ArrayList<>();
 
+    private int participantsCount;
+
     private LocalDate dateOfStart;
     private LocalDate dateOfEnd;
     private LocalTime hourOfStart;
@@ -54,9 +60,9 @@ public class Event {
 
     private boolean membersOnly = true;
     private boolean openEntry = false;
-    private boolean isCompetition = false;
-    private boolean isPractice = false;
-    private boolean isCourse = false;
+    private boolean competition = false;
+    private boolean practice = false;
+    private boolean course = false;
 
     private Long entryFee = 0L;
 
@@ -69,12 +75,76 @@ public class Event {
         return super.toString();
     }
 
+
+
+    public String toString2() {
+        return "Event{" +
+                "id_event=" + id_event +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", organizers=" + organizers +
+                ", place=" + place +
+                ", rangeName='" + rangeName + '\'' +
+                ", participants=" + participants +
+                ", participantsCount=" + participantsCount +
+                ", dateOfStart=" + dateOfStart +
+                ", dateOfEnd=" + dateOfEnd +
+                ", hourOfStart=" + hourOfStart +
+                ", hourOfEnd=" + hourOfEnd +
+                ", membersOnly=" + membersOnly +
+                ", openEntry=" + openEntry +
+                ", competition=" + competition +
+                ", practice=" + practice +
+                ", course=" + course +
+                ", entryFee=" + entryFee +
+                '}';
+    }
+
+    public Event updateEvent(Event event) {
+        this.setName(event.getName());
+        this.setDescription(event.getDescription());
+        this.setDateOfStart(event.getDateOfStart());
+        this.setDateOfEnd(event.getDateOfEnd());
+        this.setHourOfStart(event.getHourOfStart());
+        this.setHourOfEnd(event.getHourOfEnd());
+        this.setEntryFee(event.getEntryFee());
+        this.setMembersOnly(event.isMembersOnly());
+        this.setOpenEntry(event.isOpenEntry());
+        this.setCompetition(event.isCompetition());
+        this.setPractice(event.isPractice());
+        this.setCourse(event.isCourse());
+        return this;
+    }
+
+
     public void resetOrganizer() {
         this.setOrganizers(null);
     }
 
     public void addOrganizer(Club club) {
         this.organizers.add(club);
+    }
+
+    public void deleteOrganizer(Club club) {
+        this.organizers.remove(club);
+    }
+
+    public void setPlace(ShootingRange shootingRange) {
+        this.place = shootingRange;
+
+        if (shootingRange!=null) {
+            this.rangeName = shootingRange.getName();
+        }
+    }
+
+    public void addParticipant(Person person) {
+        this.participants.add(person);
+        this.participantsCount = participants.size();
+    }
+
+    public void deleteParticipant(Person person) {
+        this.participants.remove(person);
+        this.participantsCount = participants.size();
     }
 
     public List<String> getOrganizersName() {
@@ -86,21 +156,6 @@ public class Event {
             return organizers.stream().map(Club::getName).collect(Collectors.toList());
         }
     }
-
-    public int getParticipantCount() {
-        return participants.size();
-    }
-
-    public String getPlaceName() {
-        if (place==null) {
-            return "Nie przypisano strzelnicy";
-        } else {
-            return place.getName();
-        }
-    }
-
-
-
 
 
 }

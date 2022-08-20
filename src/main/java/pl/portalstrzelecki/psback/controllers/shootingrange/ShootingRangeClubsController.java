@@ -1,16 +1,16 @@
 package pl.portalstrzelecki.psback.controllers.shootingrange;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
+import org.springframework.web.server.ResponseStatusException;
+import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,19 +20,25 @@ public class ShootingRangeClubsController {
 
 
     @GetMapping("/range/clubs")
-    public List<ClubDTO> getClubRanges(@RequestParam Long id_range) {
+    public List<ClubDTO> getRangeClubs(@RequestParam Long id_range) {
 
-        Optional<ShootingRange> optionalShootingRange = shootingRangeService.getShootingRangeById(id_range);
-        ShootingRange shootingRange = optionalShootingRange.get();
-        return ClubMapper.INSTANCE.ClubToClubDtos(shootingRange.getClubs());
+        List<Club> rangeClubs = shootingRangeService.getRangeClubs(id_range);
+
+        if (!rangeClubs.isEmpty()) {
+            return ClubMapper.INSTANCE.ClubToClubDtos(rangeClubs);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+
     }
 
 
     @PatchMapping("/range/clubs")
-    public ResponseEntity<?> addClubRange(@RequestParam Long id_club, Long id_range) {
+    public ResponseEntity<?> addRangeClub(@RequestParam Long id_range, Long id_club) {
 
         if (id_range != null && id_club != null) {
-            boolean anyClubAdded = shootingRangeService.addClub(id_range, id_club);
+            boolean anyClubAdded = shootingRangeService.addRangeClub(id_range, id_club);
             if (anyClubAdded) {
                 return ResponseEntity.accepted().build();
             } else {
@@ -44,7 +50,7 @@ public class ShootingRangeClubsController {
     }
 
     @DeleteMapping("/range/clubs")
-    public ResponseEntity<?> deleteClubRange(@RequestParam Long id_club, Long id_range) {
+    public ResponseEntity<?> deleteRangeClub(@RequestParam Long id_range, Long id_club) {
 
         if (id_range != null && id_club != null) {
             boolean anyRangeClubRemoved = shootingRangeService.deleteRangeClub(id_range, id_club);

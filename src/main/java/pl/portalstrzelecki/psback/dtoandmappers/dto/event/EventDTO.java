@@ -4,16 +4,15 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Data
 public class EventDTO {
     private Long id_event;
     private String name;
     private String description;
-    private List<String> organizers;
-    private int participants;
-    private String range;
+   // private List<String> organizersNames;
+    private int participantsCount;
+    private String rangeName;
     private LocalDate dateOfStart;
     private LocalDate dateOfEnd;
     private LocalTime hourOfStart;
@@ -21,9 +20,9 @@ public class EventDTO {
     private Long entryFee;
     private boolean membersOnly;
     private boolean openEntry;
-    private boolean isCompetition;
-    private boolean isPractice;
-    private boolean isCourse;
+    private boolean competition;
+    private boolean practice;
+    private boolean course;
 
     public boolean notNull() {
         return !(

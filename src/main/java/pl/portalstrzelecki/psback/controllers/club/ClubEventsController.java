@@ -11,7 +11,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor

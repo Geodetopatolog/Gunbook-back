@@ -2,18 +2,14 @@ package pl.portalstrzelecki.psback.dtoandmappers.dto.person;
 
 import lombok.Data;
 
-
 @Data
-public class PersonRegistrationDTO {
-
+public class PersonBasicDataDTO {
     private Long id_person;
     private String name;
     private String surname;
     private String nick;
     private String description;
     private String email;
-    private String username;
-    private String password;
 
     public boolean notNull() {
         return !(id_person == null ||
@@ -21,10 +17,7 @@ public class PersonRegistrationDTO {
                 surname == null ||
                 nick == null ||
                 description == null ||
-                email == null ||
-                username == null ||
-                password == null);
+                email == null);
     }
-
 
 }

@@ -54,17 +54,16 @@ public class ClubServiceImpl implements ClubService {
     public boolean updateClub(Club club) {
         Optional<Club> optionalClub = clubRepository.findById(club.getId_club());
         if(optionalClub.isPresent()) {
-            clubRepository.save(club);
+            clubRepository.save(optionalClub.get().updateClub(club));
+
             return true;
         }
         else {
             return false;
         }
-
     }
     @Override
     public Optional<Club> getClubById(long id) {
-        //System.out.println("znalazłem klub " + optionalClub.get());
         return clubRepository.findById(id);
     }
 
@@ -73,9 +72,13 @@ public class ClubServiceImpl implements ClubService {
         return clubRepository.getClubByName(name);
     }
 
+    @Override
+    public List<Club> getAllClubs() {
+        return (List<Club>) clubRepository.findAll();
+    }
 
 
-
+//--------CLUB - MEMBERS ------------------------------------
     @Override
     public boolean addClubMember(Long id_person, Long id_club) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
@@ -86,20 +89,14 @@ public class ClubServiceImpl implements ClubService {
             Person member = optionalPerson.get();
 
             club.addMember(member);
-            clubRepository.save(club);
             member.addClub(club);
-            personRepository.save(member);
+            clubRepository.save(club);
 
-            clubMail.memberRequestMail(club, member);
+            //clubMail.memberRequestMail(club, member);
 
             return true;
         }
         else return false;
-    }
-
-    @Override
-    public List<Club> getAllClubs() {
-        return (List<Club>) clubRepository.findAll();
     }
 
     @Override
@@ -112,9 +109,9 @@ public class ClubServiceImpl implements ClubService {
             Person member = optionalPerson.get();
 
             club.deleteMember(member);
-            member.resetClub();
+            member.leaveClub(club);
             clubRepository.save(club);
-            personRepository.save(member);
+
             return true;
         }
         else return false;
@@ -132,6 +129,8 @@ public class ClubServiceImpl implements ClubService {
         }
     }
 
+
+    //--------CLUB - EVENTS ------------------------------------
     @Override
     public List<Event> getClubEvents(Long id_club) {
 
@@ -144,7 +143,6 @@ public class ClubServiceImpl implements ClubService {
         }
     }
 
-
     @Override
     public boolean addClubEvent(Long id_event, Long id_club) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
@@ -155,9 +153,9 @@ public class ClubServiceImpl implements ClubService {
             Event event = optionalEvent.get();
 
             club.addEvent(event);
-            clubRepository.save(club);
             event.addOrganizer(club);
-            eventRepository.save(event);
+
+            clubRepository.save(club);
             return true;
         }
         else return false;
@@ -175,12 +173,14 @@ public class ClubServiceImpl implements ClubService {
             club.deleteEvent(event);
             event.resetOrganizer();
             clubRepository.save(club);
-            eventRepository.save(event);
+
             return true;
         }
         else return false;
     }
 
+
+    //--------CLUB - OWNERS ------------------------------------
     @Override
     public boolean addOwner(Long id_person, Long id_club) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
@@ -191,9 +191,9 @@ public class ClubServiceImpl implements ClubService {
             Person person = optionalPerson.get();
 
             club.addOwner(person);
-            clubRepository.save(club);
             person.addOwnedClub(club);
-            personRepository.save(person);
+
+            clubRepository.save(club);
             return true;
         }
         else return false;
@@ -213,10 +213,9 @@ public class ClubServiceImpl implements ClubService {
                 person.deleteOwnedClub(club);
 
                 clubRepository.save(club);
-                personRepository.save(person);
+
                 return true;
             } else return false;
-
 
         } else return false;
     }

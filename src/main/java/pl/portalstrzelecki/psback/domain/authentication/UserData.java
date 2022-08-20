@@ -24,11 +24,9 @@ public class UserData {
     private boolean isAdmin = false;
     private boolean isGod = false;
 
-    @OneToOne (cascade=CascadeType.ALL)
+    @OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Person person;
 
     public UserData() {
-
-
     }
 }

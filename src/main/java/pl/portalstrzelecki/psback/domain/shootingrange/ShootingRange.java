@@ -27,7 +27,7 @@ public class ShootingRange {
     private String description;
     private String adress;
 
-    @ManyToMany (cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany
     @JoinTable(
             name = "clubs_ranges",
             joinColumns = @JoinColumn(name = "id_shootingrange"),
@@ -36,7 +36,7 @@ public class ShootingRange {
     private List<Club> clubs = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "place")
+    @OneToMany(mappedBy = "place", cascade = CascadeType.MERGE)
     private List<Event> events;
 
 

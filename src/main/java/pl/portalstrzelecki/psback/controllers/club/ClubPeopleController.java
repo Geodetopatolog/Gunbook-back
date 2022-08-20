@@ -11,11 +11,10 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class ClubMembersController {
+public class ClubPeopleController {
 
     private final ClubService clubService;
 
@@ -62,6 +61,50 @@ public class ClubMembersController {
 
 
 
+
+    @GetMapping("/club/owners")
+    public List<PersonDTO> getClubOwners(@RequestParam Long id_club) {
+
+        List<Person> clubOwners = clubService.getClubOwners(id_club);
+
+        if (!clubOwners.isEmpty()) {
+            return PersonMapper.INSTANCE.PersonsToPersonDtos(clubOwners);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
+
+    @PatchMapping("/club/owners")
+    public ResponseEntity<?> addClubOwner(@RequestParam Long id_club, Long id_person) {
+
+        if (id_person != null && id_club != null) {
+            boolean anyOwnerAdded = clubService.addOwner(id_person, id_club);
+            if (anyOwnerAdded) {
+                return ResponseEntity.accepted().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.status(417).build();
+        }
+    }
+
+    @DeleteMapping("/club/owners")
+    public ResponseEntity<?> deleteClubOwner(@RequestParam Long id_club, Long id_person) {
+
+        if (id_person != null && id_club != null) {
+            boolean anyClubOwnerDelete = clubService.deleteClubOwner(id_person, id_club);
+
+            if (anyClubOwnerDelete) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.status(417).build();
+        }
+    }
 
 
 

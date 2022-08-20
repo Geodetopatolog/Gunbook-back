@@ -11,7 +11,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.EventService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -25,8 +24,8 @@ public class EventController {
     @PostMapping("/event")
     @ResponseStatus(HttpStatus.CREATED)
     public void createEvent(@RequestBody EventDTO eventDTO) {
-
-        eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO), eventDTO.getRange());
+        System.out.println(eventDTO);
+        eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO), eventDTO.getRangeName());
     }
 
     @GetMapping("/event")
@@ -44,9 +43,12 @@ public class EventController {
 
     @PatchMapping("/event")
     public ResponseEntity<?> updateEvent(@RequestBody EventDTO eventDTO) {
+
         if (eventDTO.notNull()) {
             Event event = EventMapper.INSTANCE.EventDtoToEvent(eventDTO);
+
             if (eventService.updateEvent(event)) {
+
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.notFound().build();

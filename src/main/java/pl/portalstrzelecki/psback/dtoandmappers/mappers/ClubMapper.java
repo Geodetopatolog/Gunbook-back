@@ -13,10 +13,12 @@ public interface ClubMapper {
 
     ClubMapper INSTANCE = Mappers.getMapper(ClubMapper.class);
 
-    @Mapping(target = "members_count", expression = "java(club.getMembers().size())")
-    ClubDTO ClubToClubDto (Club club);
 
+    ClubDTO ClubToClubDto (Club club);
+    @Mapping(target = "events", ignore = true)
     @Mapping(target = "members", ignore = true)
+    @Mapping(target = "owners", ignore = true)
+    @Mapping(target = "ranges", ignore = true)
     Club ClubDtoToClub (ClubDTO clubDTO);
 
     List<ClubDTO> ClubToClubDtos(List<Club> clubs);

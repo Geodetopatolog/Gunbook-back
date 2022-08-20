@@ -17,7 +17,7 @@ public class JwtUtil {
 
     private final String KEY = "TurboHardkorowyKlucz123TurboHardkorowyKlucz123";
 
-    //todo zaimplementowanie asymetrycznego szyfrowania
+    //todo zaimplementowanie asymetrycznego szyfrowania, albo i nie :P
     private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(KEY));
 
     public String extractUsername(String token) {

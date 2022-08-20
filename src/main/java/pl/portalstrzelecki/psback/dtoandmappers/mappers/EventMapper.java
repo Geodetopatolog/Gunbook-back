@@ -13,9 +13,9 @@ public interface EventMapper {
 
     EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
-    @Mapping(target = "organizers", expression = "java(event.getOrganizersName())")
-    @Mapping(target = "participants", expression = "java(event.getParticipantCount())")
-    @Mapping(target = "range", expression = "java(event.getPlaceName())")
+//    @Mapping(target = "organizers", expression = "java(event.getOrganizersName())")
+//    @Mapping(target = "participants", expression = "java(event.getParticipantCount())")
+//    @Mapping(target = "range", expression = "java(event.getPlaceName())")
     EventDTO EventToEventDto (Event event);
 
     @Mapping(target = "organizers", ignore = true)

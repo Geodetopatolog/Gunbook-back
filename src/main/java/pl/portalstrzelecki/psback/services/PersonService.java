@@ -1,6 +1,8 @@
 package pl.portalstrzelecki.psback.services;
 
 import pl.portalstrzelecki.psback.domain.authentication.UserData;
+import pl.portalstrzelecki.psback.domain.club.Club;
+import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 
 import java.util.List;
@@ -19,4 +21,15 @@ public interface PersonService {
 
 
 
+    boolean leaveJoinedClub(Long id_person, Long id_club);
+    List<Club> getJoinedClubs(Long id_person);
+
+    boolean cancelClubOwnership(Long id_person, Long id_club);
+    boolean addOwnedClub(Long id_person, Long id_club);
+    List<Club> getOwnedClubs(Long id_person);
+
+
+    boolean addJoiningEventRequest(Long id_person, Long id_event);
+    boolean quitJoinedEvent(Long id_person, Long id_event);
+    List<Event> getJoinedEvents(Long id_person);
 }

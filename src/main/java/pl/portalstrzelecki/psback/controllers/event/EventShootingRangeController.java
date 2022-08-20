@@ -10,7 +10,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeD
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.EventService;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,15 +22,16 @@ public class EventShootingRangeController {
     @GetMapping("event/range")
     public ShootingRangeDTO getEventRange(@RequestParam Long id_event) {
 
-        Optional<ShootingRange> optionalShootingRange = eventService.getPlace(id_event);
+        Optional<ShootingRange> optionalShootingRange = eventService.getEventRange(id_event);
 
         if (optionalShootingRange.isPresent()) {
-            ShootingRange shootingRange = optionalShootingRange.get();
-            return ShootingRangeMapper.INSTANCE.ShootingRangeToShootingRangeDTO(shootingRange);
+            return ShootingRangeMapper.INSTANCE.ShootingRangeToShootingRangeDTO(optionalShootingRange.get());
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "nie ustawiono miejsca wydarzenia");
         }
+
+
     }
 
     @PatchMapping("/event/range")

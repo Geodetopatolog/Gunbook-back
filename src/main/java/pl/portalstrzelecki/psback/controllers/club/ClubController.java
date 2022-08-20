@@ -11,7 +11,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -28,12 +27,8 @@ public class ClubController {
         clubService.saveClub(ClubMapper.INSTANCE.ClubDtoToClub(clubDTO));
     }
 
-
     @GetMapping("/club")
     public @ResponseBody ClubDTO getClubById(@RequestParam Long id_club) {
-
-//todo dokładnie jak ma wyglądać przekazywanie parametrów do wyszukiwania, ustali się jak będę robił frontend :)
-// to tutaj to taki ładny kontroler, jak ustalę sposób przekazywania parametrów, to wszystkie ładnie pozmieniam
 
         Optional<Club> optionalClub = clubService.getClubById(id_club);
 

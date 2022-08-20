@@ -2,14 +2,17 @@ package pl.portalstrzelecki.psback.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
+import pl.portalstrzelecki.psback.repositories.ClubRepository;
 import pl.portalstrzelecki.psback.repositories.EventRepository;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.repositories.ShootingRangeRepository;
 import pl.portalstrzelecki.psback.services.EventService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +23,10 @@ public class EventServiceImpl implements EventService {
     final EventRepository eventRepository;
     final ShootingRangeRepository shootingRangeRepository;
     final PersonRepository personRepository;
+    final ClubRepository clubRepository;
 
 //podstawowe------------------------------------------------------------
-    @Override
+    @Override //todo dorobić od razu dodawanie klubu-organizatora jak się dorobi to we froncie
     public void saveEvent(Event event, String rangeName) {
         event.setId_event(null);
 
@@ -31,7 +35,6 @@ public class EventServiceImpl implements EventService {
         } else {
             eventRepository.save(event);
         }
-
     }
 
     @Override
@@ -54,8 +57,7 @@ public class EventServiceImpl implements EventService {
         Optional<Event> optionalEvent = eventRepository.findById(event.getId_event());
 
         if (optionalEvent.isPresent()) {
-//            eventRepository.save(optionalEvent.get());
-            eventRepository.save(event);
+            eventRepository.save(optionalEvent.get().updateEvent(event));
             return true;
         } else {
             return false;
@@ -74,21 +76,21 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    //Participants-------------------------------------------------------------------
+    //------EVENT - PARTICIPANTS----------------------------------------------
     @Override
-    public boolean addEventParticipant(Long id_person, Long id_event) {
+    public boolean acceptEventParticipant(Long id_person, Long id_event) {
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
         if (optionalEvent.isPresent() && optionalPerson.isPresent()) {
             Event event = optionalEvent.get();
-            Person person = optionalPerson.get();
+            Person participant = optionalPerson.get();
 
-            event.getParticipants().add(person);
-            person.getEventsJoined().add(event);
+            event.addParticipant(participant);
+            participant.getEventsJoined().add(event);
 
             eventRepository.save(event);
-            personRepository.save(person);
+//            personRepository.save(person);
             return true;
 
         } else return false;
@@ -103,7 +105,7 @@ public class EventServiceImpl implements EventService {
             Event event = optionalEvent.get();
             Person person = optionalPerson.get();
 
-            event.getParticipants().remove(person);
+            event.deleteParticipant(person);
             person.getEventsJoined().remove(event);
 
             eventRepository.save(event);
@@ -113,16 +115,20 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Person> getEventParticipants(Long id_club) {
-        return null;
+    public List<Person> getEventParticipants(Long id_event) {
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalEvent.isPresent()) {
+            return optionalEvent.get().getParticipants();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
 
-
-
-    //ShootingRange------------------------------------------------------
+    //--------EVENT - PLACE------------------------------------------------------
     @Override
-    public Optional<ShootingRange> getPlace(Long id_event) {
+    public Optional<ShootingRange> getEventRange(Long id_event) {
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
 
         if(optionalEvent.isPresent()) {
@@ -135,12 +141,14 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    @Override
+    @Override //metoda przydatna przy tworzeniu relacji pomiędzy istniejącymi encjami
     public boolean addEventRange(Long id_event, Long id_range) {
+
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
         Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id_range);
 
         if (optionalEvent.isPresent() && optionalShootingRange.isPresent()) {
+
             Event event = optionalEvent.get();
             ShootingRange shootingRange = optionalShootingRange.get();
 
@@ -148,13 +156,13 @@ public class EventServiceImpl implements EventService {
             shootingRange.addEvent(event);
 
             eventRepository.save(event);
-            shootingRangeRepository.save(shootingRange);
+//            shootingRangeRepository.save(shootingRange);
             return true;
 
         } else return false;
     }
 
-    @Override
+    @Override //metoda przydatna przy dodawaniu od razu strzelnicy do tworzonego eventu
     public boolean addEventRange(Event event, String range_name) {
         Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findByName(range_name);
 
@@ -165,7 +173,7 @@ public class EventServiceImpl implements EventService {
             shootingRange.addEvent(event);
 
             eventRepository.save(event);
-            shootingRangeRepository.save(shootingRange);
+//            shootingRangeRepository.save(shootingRange);
             return true;
 
         } else return false;
@@ -185,10 +193,61 @@ public class EventServiceImpl implements EventService {
             shootingRange.deleteEvent(event);
 
             eventRepository.save(event);
-            shootingRangeRepository.save(shootingRange);
+//            shootingRangeRepository.save(shootingRange);
             return true;
         } else return false;
     }
+
+//------EVENT - ORGANIZERS -------------------------------------------------
+
+    @Override
+    public boolean addEventOrganizer(Long id_event, Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if(optionalClub.isPresent() && optionalEvent.isPresent()) {
+            Club organizer = optionalClub.get();
+            Event event = optionalEvent.get();
+
+            organizer.addEvent(event);
+            event.addOrganizer(organizer);
+            eventRepository.save(event);
+
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean deleteEventOrganizer(Long id_event, Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalClub.isPresent() && optionalEvent.isPresent()) {
+            Club organizer = optionalClub.get();
+            Event event = optionalEvent.get();
+
+            organizer.deleteEvent(event);
+            event.deleteOrganizer(organizer);
+            eventRepository.save(event);
+
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public List<Club> getEventOrganizers(Long id_event) {
+
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalEvent.isPresent()) {
+            return optionalEvent.get().getOrganizers();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
 
 
 

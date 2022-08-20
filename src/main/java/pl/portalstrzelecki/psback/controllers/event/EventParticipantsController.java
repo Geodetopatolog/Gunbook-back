@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
@@ -13,8 +12,6 @@ import pl.portalstrzelecki.psback.services.EventService;
 
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,14 +21,12 @@ public class EventParticipantsController {
 
 
     @GetMapping("/event/participants")
-    public List<PersonDTO> getClubOwners(@RequestParam Long id_event) {
+    public List<PersonDTO> getEventParticipants(@RequestParam Long id_event) {
 
-        Optional<Event> optionalEvent = eventService.getEventById(id_event);
+        List<Person> eventParticipants = eventService.getEventParticipants(id_event);
 
-        if (optionalEvent.isPresent()) {
-            List<Person> eventPatricipants = optionalEvent.get().getParticipants();
-                return PersonMapper.INSTANCE.PersonsToPersonDtos(eventPatricipants);
-
+        if (!eventParticipants.isEmpty()) {
+            return PersonMapper.INSTANCE.PersonsToPersonDtos(eventParticipants);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
@@ -39,10 +34,10 @@ public class EventParticipantsController {
     }
 
     @PatchMapping("/event/participants")
-    public ResponseEntity<?> addClubOwner(@RequestParam Long id_event, Long id_person) {
+    public ResponseEntity<?> acceptEventParticipant(@RequestParam Long id_event, Long id_person) {
 
         if (id_person != null && id_event != null) {
-            boolean anyParticipantAdded = eventService.addEventParticipant(id_person, id_event);
+            boolean anyParticipantAdded = eventService.acceptEventParticipant(id_person, id_event);
             if (anyParticipantAdded) {
                 return ResponseEntity.accepted().build();
             } else {
@@ -54,7 +49,7 @@ public class EventParticipantsController {
     }
 
     @DeleteMapping("/event/participants")
-    public ResponseEntity<?> deleteClubOwner(@RequestParam Long id_event, Long id_person) {
+    public ResponseEntity<?> removeEventParticipant(@RequestParam Long id_event, Long id_person) {
 
         if (id_person != null && id_event != null) {
             boolean anyEventParticipantDeleted = eventService.deleteEventParticipant(id_person, id_event);

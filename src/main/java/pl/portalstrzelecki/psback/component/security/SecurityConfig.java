@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService);
     }
-
+//todo ogarnac cala konfiguracje
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.csrf().disable()

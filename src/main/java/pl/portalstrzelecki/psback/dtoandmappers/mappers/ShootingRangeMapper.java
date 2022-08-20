@@ -1,6 +1,7 @@
 package pl.portalstrzelecki.psback.dtoandmappers.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
@@ -15,6 +16,8 @@ public interface ShootingRangeMapper {
 
 
     ShootingRangeDTO ShootingRangeToShootingRangeDTO (ShootingRange shootingRange);
+    @Mapping(target = "clubs", ignore = true)
+    @Mapping(target = "events", ignore = true)
     ShootingRange ShootingRangeDtoToShootingRange (ShootingRangeDTO shootingRangeDTO);
     List<ShootingRangeDTO> ShootingRangesToShootingRangeDtos (List<ShootingRange> shootingRanges);
 

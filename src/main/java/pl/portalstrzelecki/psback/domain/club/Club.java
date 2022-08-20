@@ -21,7 +21,8 @@ import java.util.List;
 public class Club {
 
     //todo dodanie pola z listą oczekujących i przerobienie serwisu
-    //todo dorobienie kontrolera odwrotnego do ClubMembersController, chodzi o rodzielenie sytuacji gdy o dołączenie prosi osoba a kiedy kogoś sam dodaje klub
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,23 +31,25 @@ public class Club {
     private String logoURL = "";
     private String name = "";
     private String description = "";
-    private String email;
+    private String email; //todo władować tutaj ogółne dane kontaktowe, email, telefon, adres
 
-    @ManyToMany(mappedBy = "ownedClubs")
+    @ManyToMany(mappedBy = "ownedClubs", cascade = CascadeType.MERGE)
     private List<Person> owners;
 
-    @ManyToMany(mappedBy = "clubs")
+    @ManyToMany(mappedBy = "clubs", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Person> members = new ArrayList<>();
 
-    @ManyToMany (mappedBy = "clubs")
+    private int members_count;
+
+    @ManyToMany (mappedBy = "clubs", cascade = CascadeType.MERGE)
     private List<ShootingRange> ranges = new ArrayList<>();
 
-    @ManyToMany (mappedBy = "organizers")
+    @ManyToMany (mappedBy = "organizers", cascade = CascadeType.MERGE)
     private List<Event> events = new ArrayList<>();
 
-    private boolean sport=false;
-    private boolean fun=false;
-    private boolean cours=false;
+    private boolean sport = false;
+    private boolean fun = false;
+    private boolean cours = false;
 
     public Club() {
     }
@@ -56,22 +59,24 @@ public class Club {
         return super.toString();
     }
 
-//    public Club updateClub(Club club) {
-//        this.logoURL = club.getLogoURL();
-//        this.name = club.getName();
-//        this.description = club.getDescription();
-//        this.sport = club.isSport();
-//        this.fun = club.isFun();
-//        this.cours = club.isCours();
-//        return this;
-//    }
+    public Club updateClub(Club club) {
+        this.logoURL = club.getLogoURL();
+        this.name = club.getName();
+        this.description = club.getDescription();
+        this.sport = club.isSport();
+        this.fun = club.isFun();
+        this.cours = club.isCours();
+        return this;
+    }
 
     public void addMember(Person member) {
         members.add(member);
+        members_count = members.size();
     }
 
     public void deleteMember(Person person) {
         members.remove(person);
+        members_count = members.size();
     }
 
     public void addRange(ShootingRange shootingRange) {
@@ -98,10 +103,5 @@ public class Club {
         owners.remove(person);
     }
 
-//    public void prepareToDelete() {
-//        this.events = null;
-//        this.owners = null;
-//        this.members = null;
-//        this.ranges = null;
-//    }
+
 }

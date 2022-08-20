@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.person.Person;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonBasicDataDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonRegistrationDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
@@ -13,7 +14,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonRegistrationMapper
 import pl.portalstrzelecki.psback.services.PersonService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -23,56 +23,17 @@ public class PersonController {
 
     private final PersonService personService;
 
-//    private final UserService userService;
-
-    @CrossOrigin
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
     public void addPerson(@RequestBody PersonRegistrationDTO personRegistrationDTO) {
-
-        System.out.println(personRegistrationDTO);
-        System.out.println(PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToPerson(personRegistrationDTO).toString());
-        System.out.println(PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToUserData(personRegistrationDTO));
 
         personService.savePerson(PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToPerson(personRegistrationDTO)
                 ,PersonRegistrationMapper.INSTANCE.PersonRegistrationDTOToUserData(personRegistrationDTO));
     }
 
-
-    @CrossOrigin
     @GetMapping("/person")
     public @ResponseBody PersonDTO getPersonById(@RequestParam Long id_person)
     {
-//        userService.saveUser(UserData.builder()
-//                        .isUser(true)
-//                        .isActive(true)
-//                        .isAdmin(true)
-//                        .isGod(true)
-//                        .password("haslo")
-//                        .username("god")
-//                        .person(personService.getPersonById(3).get())
-//                        .build());
-//
-//        userService.saveUser(UserData.builder()
-//                .isUser(true)
-//                .isActive(true)
-//                .isAdmin(true)
-//                .isGod(false)
-//                .password("haslo")
-//                .username("admin")
-//                .person(personService.getPersonById(5).get())
-//                .build());
-//
-//        userService.saveUser(UserData.builder()
-//                .isUser(true)
-//                .isActive(true)
-//                .isAdmin(false)
-//                .isGod(false)
-//                .password("haslo")
-//                .username("user")
-//                .person(personService.getPersonById(8).get())
-//                .build());
-
         Optional<Person> optionalPerson = personService.getPersonById(id_person);
         if (optionalPerson.isPresent()) {
             return PersonMapper.INSTANCE.PersonToPersonDto(optionalPerson.get());
@@ -80,13 +41,14 @@ public class PersonController {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
         }
-
     }
 
     @PatchMapping("/person")
     public ResponseEntity<?> updatePerson(@RequestBody PersonDTO personDTO) {
+
         if (personDTO.notNull()) {
             Person person = PersonMapper.INSTANCE.PersonDtoToPerson(personDTO);
+
             if (personService.updatePerson(person)) {
                 return ResponseEntity.ok().build();
             } else {
@@ -105,17 +67,19 @@ public class PersonController {
        if (anyPersonRemoved) {
            return ResponseEntity.ok().build();
        }
-
         return ResponseEntity.notFound().build();
     }
 
-
     @GetMapping("/person/all")
-    public @ResponseBody List<PersonDTO> getAllPersonNamed() {
+    public @ResponseBody List<PersonDTO> getAllPerson() {
 
             return PersonMapper.INSTANCE.PersonsToPersonDtos(personService.getAllPersons());
     }
+    @GetMapping("/person/all/basic")
+    public @ResponseBody List<PersonBasicDataDTO> getAllPersonBasicData() {
 
+            return PersonMapper.INSTANCE.PersonsToPersonBasicDataDtos(personService.getAllPersons());
+    }
 
 
 }

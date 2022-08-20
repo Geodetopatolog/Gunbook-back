@@ -12,7 +12,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -64,7 +63,6 @@ public class ShootingRangeController {
     public ResponseEntity<?> updateShootingRange(@RequestBody ShootingRangeDTO shootingRangeDTO) {
 
         if (shootingRangeDTO.notNull()) {
-
             ShootingRange shootingRange = ShootingRangeMapper.INSTANCE.ShootingRangeDtoToShootingRange(shootingRangeDTO);
             if (shootingRangeService.updateShootingRange(shootingRange)) {
                 return ResponseEntity.ok().build();
@@ -77,8 +75,7 @@ public class ShootingRangeController {
     }
 
     @DeleteMapping("/range")
-    public ResponseEntity<?> deleteShootingRange(@RequestBody Map<String, Long> json) {
-        Long id_range = json.get("id_range");
+    public ResponseEntity<?> deleteShootingRange(@RequestParam Long id_range) {
 
         boolean anyShootingRangeRemoved = shootingRangeService.deleteShootingRange(id_range);
 

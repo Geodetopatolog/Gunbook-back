@@ -31,7 +31,7 @@ public class Person {
     private String description = "";
     private String email;
 
-    @OneToOne (cascade=CascadeType.ALL)
+    @OneToOne (cascade=CascadeType.ALL, orphanRemoval = true)
     private UserData userData;
 
     @ManyToMany
@@ -42,10 +42,11 @@ public class Person {
     )
     private List<Club> ownedClubs;
 
-    @ManyToMany (mappedBy = "participants")
+    @ManyToMany (mappedBy = "participants", cascade = CascadeType.MERGE)
     private List<Event> eventsJoined;
 
-    @ManyToMany
+    @ManyToMany //do zapisu w tabeli clubs_members wystarczy samo zapisanie encji person, ale wtedy nie zapisuje zmian w klubie
+    //więc albo ręcznie w serwisie zapisujemy też klub, albo dajemy CascadeType.MERGE
     @JoinTable(
                     name = "clubs_members",
                     joinColumns = @JoinColumn(name = "id_person"),
@@ -62,8 +63,33 @@ public class Person {
         return super.toString();
     }
 
-    public void resetClub() {
-        this.setClubs(null);
+
+    public String toString2() {
+        return "Person{" +
+                "id_person=" + id_person +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", nick='" + nick + '\'' +
+                ", description='" + description + '\'' +
+                ", email='" + email + '\'' +
+                ", userData=" + userData +
+                ", ownedClubs=" + ownedClubs +
+                ", eventsJoined=" + eventsJoined +
+                ", clubs=" + clubs +
+                '}';
+    }
+
+    public Person updatePerson(Person person) {
+        this.setName(person.getName());
+        this.setSurname(person.getSurname());
+        this.setNick(person.getNick());
+        this.setDescription(person.getDescription());
+        this.setEmail(person.getEmail());
+        return this;
+    }
+
+    public void leaveClub(Club club) {
+        this.clubs.remove(club);
     }
 
     public List<String> getClubsName() {
@@ -74,7 +100,6 @@ public class Person {
         } else {
             return clubs.stream().map(Club::getName).collect(Collectors.toList());
         }
-
     }
 
     public void addOwnedClub(Club club) {
@@ -88,4 +113,7 @@ public class Person {
     public void addClub(Club club) {
         this.clubs.add(club);
     }
+
+
+
 }
