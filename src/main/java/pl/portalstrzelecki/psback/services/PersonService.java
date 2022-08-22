@@ -14,22 +14,29 @@ public interface PersonService {
     boolean deletePerson(Long id);
     boolean updatePerson(Person person);
     Optional<Person> getPersonById(long id);
-
     List<Person> getAllPersons();
-
     List<Person> getPersonWithNameEquals(String name);
-
-
 
     boolean leaveJoinedClub(Long id_person, Long id_club);
     List<Club> getJoinedClubs(Long id_person);
+
+    List<Club> getJoinedClubsRequests(Long id_person);
+    boolean addJoinedClubRequest(Long id_person, Long id_club);
+    boolean cancelJoinedClubRequest(Long id_person, Long id_club);
 
     boolean cancelClubOwnership(Long id_person, Long id_club);
     boolean addOwnedClub(Long id_person, Long id_club);
     List<Club> getOwnedClubs(Long id_person);
 
-
+    List<Event> getEventsRequests(Long id_person);
     boolean addJoiningEventRequest(Long id_person, Long id_event);
-    boolean quitJoinedEvent(Long id_person, Long id_event);
+    boolean deleteJoiningEventRequest(Long id_person, Long id_event);
+
     List<Event> getJoinedEvents(Long id_person);
+    boolean quitJoinedEvent(Long id_person, Long id_event);
+
+
+
+
+
 }

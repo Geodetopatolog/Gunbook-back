@@ -6,37 +6,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.event.Event;
+import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
+import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class ClubEventsController {
+public class ClubShootingRangesController {
 
     private final ClubService clubService;
 
-    @GetMapping("club/events_organized")
-    public List<EventDTO> getClubEvents(@RequestParam Long id_club) {
+    @GetMapping("club/ranges")
+    public List<ShootingRangeDTO> getClubRanges(@RequestParam Long id_club) {
 
-        List<Event> clubEvents = clubService.getClubEvents(id_club);
+        List<ShootingRange> clubRanges = clubService.getClubRanges(id_club);
 
-        if (!clubEvents.isEmpty()) {
-            return EventMapper.INSTANCE.EventsToEventDtos(clubEvents);
+        if (!clubRanges.isEmpty()) {
+            return ShootingRangeMapper.INSTANCE.ShootingRangesToShootingRangeDtos(clubRanges);
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "entity not found");
         }
     }
 
-    @PatchMapping("/club/events_organized")
-    public ResponseEntity<?> addClubEvents(@RequestParam Long id_club, Long id_event) {
+    @PatchMapping("/club/ranges")
+    public ResponseEntity<?> addClubRange(@RequestParam Long id_club, Long id_range) {
 
-        if (id_event != null && id_club != null) {
-            boolean anyEventAdded = clubService.addClubEvent(id_club, id_event);
-            if (anyEventAdded) {
+        if (id_range != null && id_club != null) {
+            boolean anyRangeAdded = clubService.addClubRange(id_club, id_range);
+            if (anyRangeAdded) {
                 return ResponseEntity.accepted().build();
             }
             return ResponseEntity.notFound().build();
@@ -45,12 +48,12 @@ public class ClubEventsController {
         }
     }
 
-    @DeleteMapping("/club/events_organized")
-    public ResponseEntity<?> deleteClubEvent(@RequestParam Long id_club, Long id_event) {
+    @DeleteMapping("/club/ranges")
+    public ResponseEntity<?> deleteClubRange(@RequestParam Long id_club, Long id_range) {
 
-        if (id_event != null && id_club != null) {
-            boolean anyEventRemoved = clubService.deleteClubEvent(id_club, id_event);
-            if (anyEventRemoved) {
+        if (id_range != null && id_club != null) {
+            boolean anyRangeRemoved = clubService.deleteClubRange(id_club, id_range);
+            if (anyRangeRemoved) {
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.notFound().build();
@@ -58,6 +61,5 @@ public class ClubEventsController {
             return ResponseEntity.status(417).build();
         }
     }
-
 
 }

@@ -51,6 +51,14 @@ public class Event {
     )
     private List<Person> participants = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "event_participantsRequests",
+            joinColumns = @JoinColumn(name = "id_event"),
+            inverseJoinColumns = @JoinColumn(name = "id_person")
+    )
+    private List<Person> participantsRequests = new ArrayList<>();
+
     private int participantsCount;
 
     private LocalDate dateOfStart;

@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id_person")
 public class Person {
 
+    //todo sprawdzić, czy przy usuwaniu encji. usuwają się wszystkie jej relacje
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_person;
@@ -45,6 +46,9 @@ public class Person {
     @ManyToMany (mappedBy = "participants", cascade = CascadeType.MERGE)
     private List<Event> eventsJoined;
 
+    @ManyToMany (mappedBy = "participantsRequests", cascade = CascadeType.MERGE)
+    private List<Event> eventsRequests;
+
     @ManyToMany //do zapisu w tabeli clubs_members wystarczy samo zapisanie encji person, ale wtedy nie zapisuje zmian w klubie
     //więc albo ręcznie w serwisie zapisujemy też klub, albo dajemy CascadeType.MERGE
     @JoinTable(
@@ -53,6 +57,14 @@ public class Person {
                     inverseJoinColumns = @JoinColumn(name = "id_club")
             )
     private List<Club> clubs;
+
+    @ManyToMany
+    @JoinTable(
+            name = "clubs_applications",
+            joinColumns = @JoinColumn(name = "id_person"),
+            inverseJoinColumns = @JoinColumn(name = "id_club")
+    )
+    private List<Club> clubsApplications;
 
 
     public Person() {

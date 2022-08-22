@@ -19,8 +19,54 @@ public class PersonEventsController {
 
     private final PersonService personService;
 
+    @GetMapping("/person/joined_events/requests")
+    public List<EventDTO> getEventsRequests(@RequestParam Long id_person) {
+        List<Event> eventsRequests = personService.getEventsRequests(id_person);
+
+        if (!eventsRequests.isEmpty()) {
+            return EventMapper.INSTANCE.EventsToEventDtos(eventsRequests);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
+
+    @PatchMapping("/person/joined_events/requests")
+    public ResponseEntity<?> addEventRequest(@RequestParam Long id_person, Long id_event) {
+        if (id_person != null && id_event != null) {
+            boolean anyRequestAdded = personService.addJoiningEventRequest(id_person, id_event);
+            if (anyRequestAdded) {
+                return ResponseEntity.accepted().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.status(417).build();
+        }
+    }
+
+    @DeleteMapping("person/joined_events/requests")
+    public ResponseEntity<?> deleteEventJoiningRequest(@RequestParam Long id_person, Long id_event)
+    {
+        if (id_person != null && id_event != null) {
+            boolean anyRequestDeleted = personService.deleteJoiningEventRequest(id_person, id_event);
+            if (anyRequestDeleted) {
+                return ResponseEntity.accepted().build();
+            }
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.status(417).build();
+        }
+    }
+
+
+
+
+
+
+
     @GetMapping("/person/joined_events")
-    public List<EventDTO> getEventsByPersonId(@RequestParam Long id_person) {
+    public List<EventDTO> getJoinedEvents(@RequestParam Long id_person) {
         List<Event> joinedEvents = personService.getJoinedEvents(id_person);
 
         if (!joinedEvents.isEmpty()) {
@@ -32,19 +78,19 @@ public class PersonEventsController {
 
     }
 
-    @PostMapping("/person/joined_events")
-    public ResponseEntity<?> eventJoiningRequest(@RequestParam Long id_person, Long id_event) {
-        if (id_person != null && id_event != null) {
-            boolean anyRequestSent = personService.addJoiningEventRequest(id_person, id_event);
-            if (anyRequestSent) {
-                return ResponseEntity.accepted().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            return ResponseEntity.status(417).build();
-        }
-    }
+//    @PatchMapping("/person/joined_events")
+//    public ResponseEntity<?> eventJoiningRequest(@RequestParam Long id_person, Long id_event) {
+//        if (id_person != null && id_event != null) {
+//            boolean anyRequestSent = personService.addJoiningEventRequest(id_person, id_event);
+//            if (anyRequestSent) {
+//                return ResponseEntity.accepted().build();
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
+//        } else {
+//            return ResponseEntity.status(417).build();
+//        }
+//    }
 
     @DeleteMapping("person/joined_events")
     public ResponseEntity<?> quitJoinedEvent(@RequestParam Long id_person, Long id_event)

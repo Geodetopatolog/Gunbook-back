@@ -48,6 +48,46 @@ public class PersonClubsController {
 
 
 
+    @GetMapping("/person/clubs/request")
+    public List<ClubDTO> getMembershipRequests(@RequestParam Long id_person) {
+
+        List<Club> membershipRequests = personService.getJoinedClubsRequests(id_person);
+
+        if (!membershipRequests.isEmpty()) {
+            return ClubMapper.INSTANCE.ClubToClubDtos(membershipRequests);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
+
+    @PatchMapping("/person/clubs/request")
+    public ResponseEntity<?> addMembershipRequest(@RequestParam Long id_club, Long id_person) {
+
+        if (id_person != null && id_club != null) {
+            boolean anyRequestAdded = personService.addJoinedClubRequest(id_person, id_club);
+            if (anyRequestAdded) {
+                return ResponseEntity.accepted().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.status(417).build();
+        }
+    }
+
+    @DeleteMapping("person/clubs/request")
+    public ResponseEntity<?> deleteMembershipRequest(@RequestParam Long id_person, Long id_club) {
+        if (id_person != null && id_club != null) {
+            boolean anyMembershipRequestCanceled = personService.cancelJoinedClubRequest(id_person, id_club);
+            if (anyMembershipRequestCanceled) {
+                return ResponseEntity.accepted().build();
+            }
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.status(417).build();
+        }
+    }
 
 
     @GetMapping("/person/owned_clubs")

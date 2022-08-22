@@ -8,6 +8,7 @@ import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
+import pl.portalstrzelecki.psback.repositories.ClubRepository;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
 import pl.portalstrzelecki.psback.services.ClubService;
 import pl.portalstrzelecki.psback.services.EventService;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class PersonServiceImpl implements PersonService {
 
     final PersonRepository personRepository;
+    final ClubRepository clubRepository;
     final ClubService clubService;
     final EventService eventService;
 
@@ -86,7 +88,7 @@ public class PersonServiceImpl implements PersonService {
 
     //nie dodaję metody joinClub, bo jest to relacja zależna od klubu, nie od członka
 
-
+    //-------joined clubs
     @Override
     public List<Club> getJoinedClubs(Long id_person) {
         Optional<Person> optionalPerson = personRepository.findById(id_person);
@@ -104,6 +106,60 @@ public class PersonServiceImpl implements PersonService {
         return clubService.deleteClubMember(id_person, id_club);
     }
 
+    //------joined clubs requests
+    @Override
+    public List<Club> getJoinedClubsRequests(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getClubsApplications();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public boolean addJoinedClubRequest(Long id_person, Long id_club) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+
+        if (optionalPerson.isPresent() && optionalClub.isPresent()) {
+            Club club = optionalClub.get();
+            Person candidate = optionalPerson.get();
+
+            club.getMembershipRequests().add(candidate);
+            candidate.getClubsApplications().add(club);
+            personRepository.save(candidate);
+
+            //clubMail.memberRequestMail(club, member);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean cancelJoinedClubRequest(Long id_person, Long id_club) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+
+        if (optionalPerson.isPresent() && optionalClub.isPresent()) {
+            Club club = optionalClub.get();
+            Person candidate = optionalPerson.get();
+
+            club.getMembershipRequests().remove(candidate);
+            candidate.getClubsApplications().remove(club);
+            personRepository.save(candidate);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //----------owned clubs
     @Override
     public boolean addOwnedClub(Long id_person, Long id_club) {
         return clubService.addOwner(id_person, id_club);
@@ -130,18 +186,30 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
+    public List<Event> getEventsRequests(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getEventsRequests();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
     public boolean addJoiningEventRequest(Long id_person, Long id_event) {
-        //todo przerobić to na prośbę o dołączenie
+
         Optional<Event> optionalEvent = eventService.getEventById(id_event);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
         if(optionalEvent.isPresent() && optionalPerson.isPresent()) {
             Event event = optionalEvent.get();
-            Person participant = optionalPerson.get();
+            Person candidate = optionalPerson.get();
 
-            event.addParticipant(participant);
-            participant.getEventsJoined().add(event);
-            personRepository.save(participant);
+            event.getParticipantsRequests().add(candidate);
+            candidate.getEventsRequests().add(event);
+            personRepository.save(candidate);
 
             //clubMail.memberRequestMail(club, member);
 
@@ -149,8 +217,36 @@ public class PersonServiceImpl implements PersonService {
         }
         else return false;
     }
+    @Override
+    public boolean deleteJoiningEventRequest(Long id_person, Long id_event) {
+        Optional<Event> optionalEvent = eventService.getEventById(id_event);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
 
-    //todo dorobić metode do usuwania prośby o dołączenie
+        if (optionalEvent.isPresent() && optionalPerson.isPresent()) {
+            Event event = optionalEvent.get();
+            Person candidate = optionalPerson.get();
+
+            event.getParticipantsRequests().remove(candidate);
+            candidate.getEventsRequests().remove(event);
+            personRepository.save(candidate);
+            return true;
+        } else return false;
+    }
+
+
+
+
+    @Override
+    public List<Event> getJoinedEvents(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getEventsJoined();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
     public boolean quitJoinedEvent(Long id_person, Long id_event) {
         Optional<Event> optionalEvent = eventService.getEventById(id_event);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
@@ -166,15 +262,5 @@ public class PersonServiceImpl implements PersonService {
         } else return false;
     }
 
-    @Override
-    public List<Event> getJoinedEvents(Long id_person) {
-        Optional<Person> optionalPerson = personRepository.findById(id_person);
 
-        if (optionalPerson.isPresent()) {
-            return optionalPerson.get().getEventsJoined();
-
-        } else {
-            return new ArrayList<>();
-        }
-    }
 }

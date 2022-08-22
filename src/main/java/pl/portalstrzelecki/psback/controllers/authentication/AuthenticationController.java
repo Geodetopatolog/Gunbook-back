@@ -51,6 +51,7 @@ public class AuthenticationController {
         if (optionalUserByUsername.isPresent())
         {
             Person personByUsername = optionalUserByUsername.get().getPerson();
+
             claims.put("loggedUserId", personByUsername.getId_person());
         } else {
             claims.put("loggedUserId", 0);

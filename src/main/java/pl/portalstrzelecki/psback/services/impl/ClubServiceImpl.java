@@ -6,9 +6,11 @@ import pl.portalstrzelecki.psback.component.mailer.clubmail.ClubMail;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.person.Person;
+import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.repositories.ClubRepository;
 import pl.portalstrzelecki.psback.repositories.EventRepository;
 import pl.portalstrzelecki.psback.repositories.PersonRepository;
+import pl.portalstrzelecki.psback.repositories.ShootingRangeRepository;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class ClubServiceImpl implements ClubService {
     final ClubRepository clubRepository;
     final PersonRepository personRepository;
     final EventRepository eventRepository;
+    final ShootingRangeRepository shootingRangeRepository;
     final ClubMail clubMail;
 
 
@@ -77,10 +80,59 @@ public class ClubServiceImpl implements ClubService {
         return (List<Club>) clubRepository.findAll();
     }
 
+//--------CLUB - MEMBERSHIP REQUESTS ---------------------
 
-//--------CLUB - MEMBERS ------------------------------------
+
     @Override
-    public boolean addClubMember(Long id_person, Long id_club) {
+    public List<Person> getMembershipRequests(Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+
+        if (optionalClub.isPresent()) {
+            return optionalClub.get().getMembershipRequests();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public boolean acceptMembershipRequest(Long id_club, Long id_person) {
+        if (addClubMember(id_person, id_club)) {
+            deleteMembershipRequest(id_person, id_club);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean deleteMembershipRequest(Long id_club, Long id_person) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalClub.isPresent() && optionalPerson.isPresent()) {
+            Club club = optionalClub.get();
+            Person candidate = optionalPerson.get();
+
+            club.getMembershipRequests().remove(candidate);
+            candidate.getClubsApplications().remove(club);
+            clubRepository.save(club);
+            return true;
+        } else return false;
+    }
+
+    @Override
+    public boolean rejectMembershipRequest(Long id_club, Long id_person) {
+        //miejce na dodatkowe czynności, np poinformowanie kandydata itp
+        return deleteMembershipRequest(id_person, id_club);
+    }
+
+
+
+
+
+
+    //--------CLUB - MEMBERS ------------------------------------
+//    @Override
+    public boolean addClubMember(Long id_club, Long id_person) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
@@ -88,19 +140,23 @@ public class ClubServiceImpl implements ClubService {
             Club club = optionalClub.get();
             Person member = optionalPerson.get();
 
-            club.addMember(member);
-            member.addClub(club);
-            clubRepository.save(club);
+            if (club.getMembershipRequests().contains(member)) {
+                club.addMember(member);
+                member.addClub(club);
+                clubRepository.save(club);
+                return true;
+            } else {
+                return true;
+            }
 
-            //clubMail.memberRequestMail(club, member);
-
-            return true;
+        } else {
+            return false;
         }
-        else return false;
+
     }
 
     @Override
-    public boolean deleteClubMember(Long id_person, Long id_club) {
+    public boolean deleteClubMember(Long id_club, Long id_person) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
@@ -144,7 +200,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public boolean addClubEvent(Long id_event, Long id_club) {
+    public boolean addClubEvent(Long id_club, Long id_event) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
 
@@ -162,7 +218,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public boolean deleteClubEvent(Long id_event, Long id_club) {
+    public boolean deleteClubEvent(Long id_club, Long id_event) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
 
@@ -182,7 +238,7 @@ public class ClubServiceImpl implements ClubService {
 
     //--------CLUB - OWNERS ------------------------------------
     @Override
-    public boolean addOwner(Long id_person, Long id_club) {
+    public boolean addOwner(Long id_club, Long id_person) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
@@ -200,7 +256,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public boolean deleteClubOwner(Long id_person, Long id_club) {
+    public boolean deleteClubOwner(Long id_club, Long id_person) {
         Optional<Club> optionalClub = clubRepository.findById(id_club);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
@@ -231,4 +287,53 @@ public class ClubServiceImpl implements ClubService {
         }
     }
 
+    //---------CLUB - SHOOTING RANGE --------------------
+
+
+    @Override
+    public List<ShootingRange> getClubRanges(Long id_club) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+
+        if (optionalClub.isPresent()) {
+            return optionalClub.get().getRanges();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public boolean addClubRange(Long id_club, Long id_range) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id_range);
+
+        if (optionalClub.isPresent() && optionalShootingRange.isPresent()) {
+            Club club = optionalClub.get();
+            ShootingRange range = optionalShootingRange.get();
+
+            club.getRanges().add(range);
+            range.getClubs().add(club);
+
+            clubRepository.save(club);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean deleteClubRange(Long id_club, Long id_range) {
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+        Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id_range);
+
+        if (optionalClub.isPresent() && optionalShootingRange.isPresent()) {
+            Club club = optionalClub.get();
+            ShootingRange range = optionalShootingRange.get();
+
+            club.getRanges().remove(range);
+            range.getClubs().remove(club);
+
+            clubRepository.save(club);
+            return true;
+        }
+        else return false;
+    }
 }

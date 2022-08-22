@@ -77,27 +77,88 @@ public class EventServiceImpl implements EventService {
 
 
     //------EVENT - PARTICIPANTS----------------------------------------------
+
+
     @Override
-    public boolean acceptEventParticipant(Long id_person, Long id_event) {
+    public List<Person> getParticipantsRequests(Long id_event) {
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalEvent.isPresent()) {
+            return optionalEvent.get().getParticipantsRequests();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public boolean acceptEventParticipantRequest(Long id_event, Long id_person) {
+        if (addEventParticipant(id_event, id_person)) {
+            deleteEventParticipantRequest(id_event, id_person);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean deleteEventParticipantRequest(Long id_event, Long id_person) {
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
         if (optionalEvent.isPresent() && optionalPerson.isPresent()) {
             Event event = optionalEvent.get();
-            Person participant = optionalPerson.get();
+            Person candidate = optionalPerson.get();
 
-            event.addParticipant(participant);
-            participant.getEventsJoined().add(event);
+            event.getParticipantsRequests().remove(candidate);
+            candidate.getEventsRequests().remove(event);
 
             eventRepository.save(event);
-//            personRepository.save(person);
             return true;
-
         } else return false;
     }
 
     @Override
-    public boolean deleteEventParticipant(Long id_person, Long id_event) {
+    public boolean rejectEventParticipantRequest(Long id_event, Long id_person) {
+        //miejsce na dodatkowe opcje :)
+        return deleteEventParticipantRequest(id_event, id_person);
+    }
+
+
+
+    @Override
+    public List<Person> getEventParticipants(Long id_event) {
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+
+        if (optionalEvent.isPresent()) {
+            return optionalEvent.get().getParticipants();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean addEventParticipant(Long id_event, Long id_person) {
+        Optional<Event> optionalEvent = eventRepository.findById(id_event);
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalEvent.isPresent() && optionalPerson.isPresent()) {
+            Event event = optionalEvent.get();
+            Person candidate = optionalPerson.get();
+
+            if (event.getParticipantsRequests().contains(candidate)) {
+                event.addParticipant(candidate);
+                candidate.getEventsJoined().add(event);
+                eventRepository.save(event);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    @Override
+    public boolean deleteEventParticipant(Long id_event, Long id_person) {
         Optional<Event> optionalEvent = eventRepository.findById(id_event);
         Optional<Person> optionalPerson = personRepository.findById(id_person);
 
@@ -109,20 +170,9 @@ public class EventServiceImpl implements EventService {
             person.getEventsJoined().remove(event);
 
             eventRepository.save(event);
-            personRepository.save(person);
+//            personRepository.save(person);
             return true;
         } else return false;
-    }
-
-    @Override
-    public List<Person> getEventParticipants(Long id_event) {
-        Optional<Event> optionalEvent = eventRepository.findById(id_event);
-
-        if (optionalEvent.isPresent()) {
-            return optionalEvent.get().getParticipants();
-        } else {
-            return new ArrayList<>();
-        }
     }
 
 

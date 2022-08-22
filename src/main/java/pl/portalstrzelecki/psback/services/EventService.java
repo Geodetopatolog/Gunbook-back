@@ -16,16 +16,21 @@ public interface EventService {
     Optional<Event> getEventById(long id);
     List<Event> getAllEvents();
 
-    boolean acceptEventParticipant(Long id_person, Long id_event);
-    boolean deleteEventParticipant(Long id_person, Long id_event);
+    List<Person> getParticipantsRequests(Long id_event);
+    boolean acceptEventParticipantRequest(Long id_event, Long id_person);
+    boolean rejectEventParticipantRequest(Long id_event, Long id_person);
+
+    boolean deleteEventParticipant(Long id_event, Long id_person);
     List<Person> getEventParticipants(Long id_event);
 
     Optional<ShootingRange> getEventRange(Long id_event);
-
     boolean addEventRange(Long id_event, Long id_range);
     boolean addEventRange(Event event, String range);
     boolean deleteEventRange(Long id_event, Long id_range);
+
     public boolean addEventOrganizer(Long id_event, Long id_club);
     public boolean deleteEventOrganizer(Long id_event, Long id_club);
     public List<Club> getEventOrganizers(Long id_event);
+
+
 }

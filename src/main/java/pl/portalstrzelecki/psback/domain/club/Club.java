@@ -20,10 +20,6 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id_club")
 public class Club {
 
-    //todo dodanie pola z listą oczekujących i przerobienie serwisu
-
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_club;
@@ -38,6 +34,9 @@ public class Club {
 
     @ManyToMany(mappedBy = "clubs", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Person> members = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "clubsApplications", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    private List<Person> membershipRequests = new ArrayList<>();
 
     private int members_count;
 

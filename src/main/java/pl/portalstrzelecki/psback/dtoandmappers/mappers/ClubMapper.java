@@ -19,6 +19,7 @@ public interface ClubMapper {
     @Mapping(target = "members", ignore = true)
     @Mapping(target = "owners", ignore = true)
     @Mapping(target = "ranges", ignore = true)
+    @Mapping(target = "membershipRequests", ignore = true)
     Club ClubDtoToClub (ClubDTO clubDTO);
 
     List<ClubDTO> ClubToClubDtos(List<Club> clubs);
