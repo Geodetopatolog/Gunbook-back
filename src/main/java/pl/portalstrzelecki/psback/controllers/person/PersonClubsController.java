@@ -46,6 +46,19 @@ public class PersonClubsController {
         }
     }
 
+    @GetMapping("/person/clubs/ids")
+    public List<Long> getJoinedClubIds(@RequestParam Long id_person) {
+
+        List<Long> joinedClubsIds = personService.getJoinedClubsIds(id_person);
+
+        if (!joinedClubsIds.isEmpty()) {
+            return joinedClubsIds;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
+
 
 
     @GetMapping("/person/clubs/request")
@@ -60,6 +73,7 @@ public class PersonClubsController {
                     HttpStatus.NOT_FOUND, "entity not found");
         }
     }
+
 
     @PatchMapping("/person/clubs/request")
     public ResponseEntity<?> addMembershipRequest(@RequestParam Long id_club, Long id_person) {
@@ -89,9 +103,24 @@ public class PersonClubsController {
         }
     }
 
+    @GetMapping("/person/clubs/request/ids")
+    public List<Long> getAppliedClubIds(@RequestParam Long id_person) {
+
+        List<Long> appliedClubsIds = personService.getAppliedClubsIds(id_person);
+
+        if (!appliedClubsIds.isEmpty()) {
+            return appliedClubsIds;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
+
+
+
 
     @GetMapping("/person/owned_clubs")
-    public List<ClubDTO> getOwnedClubsByPersonId(@RequestParam Long id_person)
+    public List<ClubDTO> getOwnedClubs(@RequestParam Long id_person)
     {
         List<Club> ownedClubs = personService.getOwnedClubs(id_person);
 
@@ -129,6 +158,19 @@ public class PersonClubsController {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.status(417).build();
+        }
+    }
+
+    @GetMapping("/person/owned_clubs/ids")
+    public List<Long> getOwnedClubsIds(@RequestParam Long id_person)
+    {
+        List<Long> ownedClubsIds = personService.getOwnedClubsIds(id_person);
+
+        if (!ownedClubsIds.isEmpty()) {
+            return ownedClubsIds;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
         }
     }
 

@@ -21,17 +21,21 @@ public class ShootingRange {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Long id_shootingrange;
 
+    @Column(name = "Nazwa")
     private String name;
+    @Column(name = "Opis")
     private String description;
+    @Column(name = "Adres")
     private String adress;
 
     @ManyToMany
     @JoinTable(
             name = "clubs_ranges",
-            joinColumns = @JoinColumn(name = "id_shootingrange"),
-            inverseJoinColumns = @JoinColumn(name = "id_club")
+            joinColumns = @JoinColumn(name = "ID_strzelnicy"),
+            inverseJoinColumns = @JoinColumn(name = "ID_klubu")
     )
     private List<Club> clubs = new ArrayList<>();
 

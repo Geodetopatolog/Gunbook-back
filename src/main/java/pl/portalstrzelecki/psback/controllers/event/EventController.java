@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventRegistrationDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.EventService;
 
@@ -23,9 +24,11 @@ public class EventController {
 
     @PostMapping("/event")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createEvent(@RequestBody EventDTO eventDTO) {
-        System.out.println(eventDTO);
-        eventService.saveEvent(EventMapper.INSTANCE.EventDtoToEvent(eventDTO), eventDTO.getRangeName());
+    public void createEvent(@RequestBody EventRegistrationDTO eventRegistrationDTO) {
+        System.out.println(eventRegistrationDTO);
+        eventService.saveEvent(EventMapper.INSTANCE.EventRegostrationDtoToEvent(eventRegistrationDTO),
+                eventRegistrationDTO.getRangeName(),
+                eventRegistrationDTO.getId_club());
     }
 
     @GetMapping("/event")

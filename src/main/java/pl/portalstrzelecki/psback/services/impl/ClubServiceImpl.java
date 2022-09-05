@@ -35,6 +35,24 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
+    public boolean saveClub(Club club, Long id_founder) {
+        Optional<Person> optionalPerson = personRepository.findById(id_founder);
+
+        if (optionalPerson.isPresent()) {
+            Person founder = optionalPerson.get();
+
+            club.addOwner(founder);
+            club.addMember(founder);
+
+            founder.getOwnedClubs().add(club);
+            founder.getClubs().add(club);
+            clubRepository.save(club);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean deleteClub(Long id) {
         Optional<Club> optionalClub = clubRepository.findById(id);
         if(optionalClub.isPresent()) {
@@ -96,7 +114,7 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public boolean acceptMembershipRequest(Long id_club, Long id_person) {
-        if (addClubMember(id_person, id_club)) {
+        if (addClubMember(id_club, id_person)) {
             deleteMembershipRequest(id_person, id_club);
             return true;
         } else {
@@ -122,7 +140,7 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public boolean rejectMembershipRequest(Long id_club, Long id_person) {
         //miejce na dodatkowe czynności, np poinformowanie kandydata itp
-        return deleteMembershipRequest(id_person, id_club);
+        return deleteMembershipRequest(id_club, id_person);
     }
 
 

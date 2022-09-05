@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EventService {
 
-    void saveEvent(Event event, String rangeName);
+    void saveEvent(Event event, String rangeName, Long id_club);
     boolean deleteEvent(Long id);
     boolean updateEvent(Event event);
     Optional<Event> getEventById(long id);

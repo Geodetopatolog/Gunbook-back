@@ -59,6 +59,17 @@ public class PersonEventsController {
         }
     }
 
+    @GetMapping("/person/joined_events/requests/ids")
+    public List<Long> getEventsRequestsIds(@RequestParam Long id_person) {
+        List<Long> eventsRequestsIds = personService.getEventsRequestsIds(id_person);
+
+        if (!eventsRequestsIds.isEmpty()) {
+            return eventsRequestsIds;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+        }
+    }
 
 
 
@@ -103,6 +114,18 @@ public class PersonEventsController {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.status(417).build();
+        }
+    }
+
+    @GetMapping("/person/joined_events/ids")
+    public List<Long> getJoinedEventsIds(@RequestParam Long id_person) {
+        List<Long> joinedEventsIds = personService.getJoinedEventsIds(id_person);
+
+        if (!joinedEventsIds.isEmpty()) {
+            return joinedEventsIds;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
         }
     }
 

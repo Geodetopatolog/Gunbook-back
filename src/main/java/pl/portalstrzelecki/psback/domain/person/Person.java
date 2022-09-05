@@ -24,15 +24,22 @@ public class Person {
     //todo sprawdzić, czy przy usuwaniu encji. usuwają się wszystkie jej relacje
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Long id_person;
 
+    @Column(name = "Imię")
     private String name = "";
+    @Column(name = "Nazwisko")
     private String surname = "";
+    @Column(name = "Nick")
     private String nick = "";
+    @Column(name = "Opis")
     private String description = "";
+    @Column(name = "Email")
     private String email;
 
     @OneToOne (cascade=CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn (name = "ID_danych_logowania")
     private UserData userData;
 
     @ManyToMany
@@ -100,32 +107,68 @@ public class Person {
         return this;
     }
 
+    public void addClub(Club club) {
+        this.clubs.add(club);
+    }
     public void leaveClub(Club club) {
         this.clubs.remove(club);
     }
-
-    public List<String> getClubsName() {
-        if (clubs == null) {
+    public List<String> getClubsNames() {
+        if (this.clubs == null) {
             List<String> messageList = new ArrayList<>();
             messageList.add("Nie przypisano organizatorów");
             return messageList;
         } else {
-            return clubs.stream().map(Club::getName).collect(Collectors.toList());
+            return this.clubs.stream().map(Club::getName).collect(Collectors.toList());
+        }
+    }
+    public List<Long> getClubsIds() {
+        if (this.clubs == null) {
+            return new ArrayList<>();
+        } else {
+            return this.clubs.stream().map(Club::getId_club).collect(Collectors.toList());
         }
     }
 
+    public List<Long> getAppliedClubsIds() {
+        if (this.clubsApplications == null) {
+            return new ArrayList<>();
+        } else {
+            return this.clubsApplications.stream().map(Club::getId_club).collect(Collectors.toList());
+        }
+    }
+
+
+
+
     public void addOwnedClub(Club club) {
-        ownedClubs.add(club);
+        this.ownedClubs.add(club);
     }
-
     public void deleteOwnedClub(Club club) {
-        ownedClubs.remove(club);
+        this.ownedClubs.remove(club);
+    }
+    public List<Long> getOwnedClubsIds() {
+        if (this.ownedClubs == null) {
+            return new ArrayList<>();
+        } else {
+            return this.ownedClubs.stream().map(Club::getId_club).collect(Collectors.toList());
+        }
     }
 
-    public void addClub(Club club) {
-        this.clubs.add(club);
+
+    public List<Long> getJoinedEventsIds() {
+        if (this.eventsJoined == null) {
+            return new ArrayList<>();
+        } else {
+            return this.eventsJoined.stream().map(Event::getId_event).collect(Collectors.toList());
+        }
     }
 
-
-
+    public List<Long> getRequestEventsIds() {
+        if (this.eventsRequests == null) {
+            return new ArrayList<>();
+        } else {
+            return this.eventsRequests.stream().map(Event::getId_event).collect(Collectors.toList());
+        }
+    }
 }

@@ -22,9 +22,12 @@ public class Event {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Long id_event;
 
+    @Column(name = "Nazwa")
     private String name;
+    @Column(name = "Opis")
     private String description;
 
     @ManyToMany
@@ -33,14 +36,15 @@ public class Event {
             joinColumns = @JoinColumn(name = "id_event"),
             inverseJoinColumns = @JoinColumn(name = "id_club")
     )
-    private List<Club> organizers;
+    private List<Club> organizers = new ArrayList<>();
 
     //private List<String> organizersNames;
 
     @ManyToOne
-    @JoinColumn(name = "id_shootingrange")
+    @JoinColumn(name = "ID_strzelnicy")
     private ShootingRange place;
 
+    @Column(name = "Nazwa_strzelnicy")
     private String rangeName;
 
     @ManyToMany
@@ -59,19 +63,29 @@ public class Event {
     )
     private List<Person> participantsRequests = new ArrayList<>();
 
+    @Column(name = "Ilość_uczestników")
     private int participantsCount;
 
+    @Column(name = "Data_rozpoczęcia")
     private LocalDate dateOfStart;
+    @Column(name = "Data_zakończenia")
     private LocalDate dateOfEnd;
+    @Column(name = "Godzina_rozpoczęcia")
     private LocalTime hourOfStart;
+    @Column(name = "Godzina_zakończenia")
     private LocalTime hourOfEnd;
 
+    @Column(name = "Tylko_członkowie")
     private boolean membersOnly = true;
+    @Column(name = "Zapisy")
     private boolean openEntry = false;
+    @Column(name = "Zawody")
     private boolean competition = false;
+    @Column(name = "Praktyka")
     private boolean practice = false;
+    @Column(name = "Kurs")
     private boolean course = false;
-
+    @Column(name = "Wpisowe")
     private Long entryFee = 0L;
 
     public Event() {

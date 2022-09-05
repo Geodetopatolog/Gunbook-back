@@ -13,7 +13,7 @@ public interface PersonMapper {
 
     PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
 
-    @Mapping(target = "clubs_name", expression = "java(person.getClubsName())")
+    @Mapping(target = "clubs_name", expression = "java(person.getClubsNames())")
     PersonDTO PersonToPersonDto(Person person);
 
     @Mapping(target = "clubs", ignore = true)

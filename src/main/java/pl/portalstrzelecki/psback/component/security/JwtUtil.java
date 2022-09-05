@@ -17,7 +17,6 @@ public class JwtUtil {
 
     private final String KEY = "TurboHardkorowyKlucz123TurboHardkorowyKlucz123";
 
-    //todo zaimplementowanie asymetrycznego szyfrowania, albo i nie :P
     private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(KEY));
 
     public String extractUsername(String token) {
@@ -28,13 +27,18 @@ public class JwtUtil {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    public Long extractId(String token) {
+        return extractAllClaims(token).get("id", Long.class);
+    }
+
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
+        return claims;
     }
 
     private Boolean isTokenExpired(String token) {

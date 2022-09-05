@@ -44,7 +44,10 @@ public class PersonController {
     }
 
     @PatchMapping("/person")
-    public ResponseEntity<?> updatePerson(@RequestBody PersonDTO personDTO) {
+    public ResponseEntity<?> updatePerson(@RequestBody PersonDTO personDTO, @RequestHeader (name="Authorization") String token) {
+
+//        boolean permission = personService.isPermited(token.substring(7), personDTO.getId_person());
+
 
         if (personDTO.notNull()) {
             Person person = PersonMapper.INSTANCE.PersonDtoToPerson(personDTO);
@@ -80,6 +83,7 @@ public class PersonController {
 
             return PersonMapper.INSTANCE.PersonsToPersonBasicDataDtos(personService.getAllPersons());
     }
+
 
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubRegistrationDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
@@ -22,9 +23,10 @@ public class ClubController {
 
     @PostMapping("/club")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createClub(@RequestBody ClubDTO clubDTO) {
-
-        clubService.saveClub(ClubMapper.INSTANCE.ClubDtoToClub(clubDTO));
+    public void createClub(@RequestBody ClubRegistrationDTO clubRegistrationDTO) {
+        System.out.println(clubRegistrationDTO);
+        clubService.saveClub(ClubMapper.INSTANCE.ClubRegistrationDTOtoClub(clubRegistrationDTO),
+                clubRegistrationDTO.getId_person());
     }
 
     @GetMapping("/club")

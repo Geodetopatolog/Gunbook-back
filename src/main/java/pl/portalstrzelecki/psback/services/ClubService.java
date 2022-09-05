@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface ClubService {
 //todo pozamieniać wszędzie kolejność zmiennycy, pierwsze ID ma być od nazwy kontrolera
     void saveClub(Club club);
+    boolean saveClub(Club club, Long id_founder);
     boolean deleteClub(Long id);
     boolean updateClub(Club club);
     Optional<Club> getClubById(long id);

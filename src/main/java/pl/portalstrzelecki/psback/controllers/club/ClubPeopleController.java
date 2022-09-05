@@ -13,6 +13,7 @@ import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ClubPeopleController {
@@ -32,7 +33,7 @@ public class ClubPeopleController {
                     HttpStatus.NOT_FOUND, "entity not found");
         }
     }
-    //todo dorobić to całe zatwierdzanie w innych miejscach
+
     @PatchMapping("/club/members/requests")
     public ResponseEntity<?> acceptMembershipRequest(@RequestParam Long id_club, Long id_person) {
 

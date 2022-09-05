@@ -26,13 +26,21 @@ public class EventServiceImpl implements EventService {
     final ClubRepository clubRepository;
 
 //podstawowe------------------------------------------------------------
-    @Override //todo dorobić od razu dodawanie klubu-organizatora jak się dorobi to we froncie
-    public void saveEvent(Event event, String rangeName) {
-        event.setId_event(null);
+    @Override
+    public void saveEvent(Event event, String rangeName, Long id_club) {
+        Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findByName(rangeName);
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
 
-        if (rangeName!=null) {
-            addEventRange(event, rangeName);
-        } else {
+        if (optionalShootingRange.isPresent() && optionalClub.isPresent()) {
+            ShootingRange place = optionalShootingRange.get();
+            Club organizer = optionalClub.get();
+
+            event.setPlace(place);
+            event.addOrganizer(organizer);
+
+            place.addEvent(event);
+            organizer.addEvent(event);
+
             eventRepository.save(event);
         }
     }

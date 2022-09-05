@@ -22,15 +22,20 @@ public class Club {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Long id_club;
 
+    @Column(name = "URL_loga_klubu")
     private String logoURL = "";
+    @Column(name = "Nazwa")
     private String name = "";
+    @Column(name = "Opis")
     private String description = "";
+    @Column(name = "Email")
     private String email; //todo władować tutaj ogółne dane kontaktowe, email, telefon, adres
 
     @ManyToMany(mappedBy = "ownedClubs", cascade = CascadeType.MERGE)
-    private List<Person> owners;
+    private List<Person> owners = new ArrayList<>();
 
     @ManyToMany(mappedBy = "clubs", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Person> members = new ArrayList<>();
@@ -38,6 +43,7 @@ public class Club {
     @ManyToMany(mappedBy = "clubsApplications", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Person> membershipRequests = new ArrayList<>();
 
+    @Column(name = "Ilość_członków")
     private int members_count;
 
     @ManyToMany (mappedBy = "clubs", cascade = CascadeType.MERGE)
@@ -46,8 +52,11 @@ public class Club {
     @ManyToMany (mappedBy = "organizers", cascade = CascadeType.MERGE)
     private List<Event> events = new ArrayList<>();
 
+    @Column(name = "Sport")
     private boolean sport = false;
+    @Column(name = "Rekreacja")
     private boolean fun = false;
+    @Column(name = "Kursy")
     private boolean cours = false;
 
     public Club() {
@@ -56,6 +65,26 @@ public class Club {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+
+    public String toString2() {
+        return "Club{" +
+                "id_club=" + id_club +
+                ", logoURL='" + logoURL + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", email='" + email + '\'' +
+                ", owners=" + owners +
+                ", members=" + members +
+                ", membershipRequests=" + membershipRequests +
+                ", members_count=" + members_count +
+                ", ranges=" + ranges +
+                ", events=" + events +
+                ", sport=" + sport +
+                ", fun=" + fun +
+                ", cours=" + cours +
+                '}';
     }
 
     public Club updateClub(Club club) {

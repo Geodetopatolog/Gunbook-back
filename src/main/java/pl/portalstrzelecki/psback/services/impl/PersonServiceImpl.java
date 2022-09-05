@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.portalstrzelecki.psback.component.security.JwtUtil;
 import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.domain.event.Event;
@@ -16,6 +17,7 @@ import pl.portalstrzelecki.psback.services.PersonService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,6 +28,14 @@ public class PersonServiceImpl implements PersonService {
     final ClubRepository clubRepository;
     final ClubService clubService;
     final EventService eventService;
+    final JwtUtil jwtUtil;
+
+
+    @Override
+    public boolean isPermited(String token, Long id_person) {
+        Long tokenId = jwtUtil.extractId(token);
+        return (Objects.equals(tokenId, id_person));
+    }
 
     @Override
     public void savePerson(Person person, UserData userData) {
@@ -106,6 +116,18 @@ public class PersonServiceImpl implements PersonService {
         return clubService.deleteClubMember(id_person, id_club);
     }
 
+    @Override
+    public List<Long> getJoinedClubsIds(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getClubsIds();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     //------joined clubs requests
     @Override
     public List<Club> getJoinedClubsRequests(Long id_person) {
@@ -159,6 +181,18 @@ public class PersonServiceImpl implements PersonService {
         }
     }
 
+    @Override
+    public List<Long> getAppliedClubsIds(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getAppliedClubsIds();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     //----------owned clubs
     @Override
     public boolean addOwnedClub(Long id_person, Long id_club) {
@@ -176,6 +210,18 @@ public class PersonServiceImpl implements PersonService {
 
         if (optionalPerson.isPresent()) {
             return optionalPerson.get().getOwnedClubs();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Long> getOwnedClubsIds(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getOwnedClubsIds();
 
         } else {
             return new ArrayList<>();
@@ -233,6 +279,17 @@ public class PersonServiceImpl implements PersonService {
         } else return false;
     }
 
+    @Override
+    public List<Long> getEventsRequestsIds(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getRequestEventsIds();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
 
 
 
@@ -262,5 +319,15 @@ public class PersonServiceImpl implements PersonService {
         } else return false;
     }
 
+    @Override
+    public List<Long> getJoinedEventsIds(Long id_person) {
+        Optional<Person> optionalPerson = personRepository.findById(id_person);
 
+        if (optionalPerson.isPresent()) {
+            return optionalPerson.get().getJoinedEventsIds();
+
+        } else {
+            return new ArrayList<>();
+        }
+    }
 }

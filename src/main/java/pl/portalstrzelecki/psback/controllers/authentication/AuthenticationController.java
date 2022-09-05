@@ -33,6 +33,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/authenticate")
+
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
        try {
@@ -45,28 +46,46 @@ public class AuthenticationController {
 
        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
-        Map<String, Object> claims = new HashMap<>();
+        String role;
+
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("GOD"))){
+            role = "GOD";
+       } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            role = "ADMIN";
+       } else {
+            role = "USER";
+       }
+
+
 
         Optional<UserData> optionalUserByUsername = userService.getUserByUsername(userDetails.getUsername());
+
         if (optionalUserByUsername.isPresent())
         {
             Person personByUsername = optionalUserByUsername.get().getPerson();
 
-            claims.put("loggedUserId", personByUsername.getId_person());
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("id", personByUsername.getId_person());
+
+            final String jwt = jwtUtil.generateToken(userDetails, claims);
+
+            AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                    .jwt(jwt)
+                    .loggedUserId(personByUsername.getId_person())
+                    .role(role)
+                    .loggedUserClubsIds(personByUsername.getClubsIds())
+                    .loggedUserOwnedClubsIds(personByUsername.getOwnedClubsIds())
+                    .loggedUserJoinedEventsIds(personByUsername.getJoinedEventsIds())
+                    .loggedUserAppliedClubsIds(personByUsername.getAppliedClubsIds())
+                    .loggedUserAppliedEventsIds(personByUsername.getRequestEventsIds())
+                    .build();
+
+
+            return ResponseEntity.ok(authenticationResponse);
         } else {
-            claims.put("loggedUserId", 0);
+            return ResponseEntity.notFound().build();
         }
 
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("GOD"))){
-           claims.put("grantedAuthority", "GOD");
-       } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-           claims.put("grantedAuthority", "ADMIN");
-       } else {
-           claims.put("grantedAuthority", "USER");
-       }
-
-       final String jwt = jwtUtil.generateToken(userDetails, claims);
-       return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
 
