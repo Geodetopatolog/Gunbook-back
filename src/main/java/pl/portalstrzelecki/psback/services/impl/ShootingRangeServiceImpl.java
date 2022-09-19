@@ -30,6 +30,28 @@ public class ShootingRangeServiceImpl implements ShootingRangeService {
     }
 
     @Override
+    public boolean saveShootingRange(ShootingRange shootingRange, Long id_club) {
+
+        Optional<Club> optionalClub = clubRepository.findById(id_club);
+
+        if (optionalClub.isPresent()) {
+            Club club = optionalClub.get();
+
+            shootingRange.addClub(club);
+            club.addRange(shootingRange);
+
+            shootingRangeRepository.save(shootingRange);
+            return true;
+        } else {
+            return false;
+        }
+
+
+
+
+    }
+
+    @Override
     public boolean deleteShootingRange(Long id) {
         Optional<ShootingRange> optionalShootingRange = shootingRangeRepository.findById(id);
         if(optionalShootingRange.isPresent()) {

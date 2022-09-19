@@ -33,6 +33,6 @@ public interface EventMapper {
     @Mapping(target = "participantsRequests", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "participants", expression = "java(new java.util.ArrayList<>())")
     @Mapping(target = "participantsCount", ignore = true)
-    Event EventRegostrationDtoToEvent (EventRegistrationDTO eventRegistrationDTO);
+    Event EventRegistrationDtoToEvent(EventRegistrationDTO eventRegistrationDTO);
 
 }

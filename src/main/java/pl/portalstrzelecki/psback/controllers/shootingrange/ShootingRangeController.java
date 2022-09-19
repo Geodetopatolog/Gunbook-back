@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeNameDTO;
+import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeRegistrationDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
@@ -24,9 +25,9 @@ public class ShootingRangeController {
 
     @PostMapping("/range")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveShootingRange(@RequestBody ShootingRangeDTO shootingRangeDTO) {
-        ShootingRange shootingRange = ShootingRangeMapper.INSTANCE.ShootingRangeDtoToShootingRange(shootingRangeDTO);
-        shootingRangeService.saveShootingRange(shootingRange);
+    public void saveShootingRange(@RequestBody ShootingRangeRegistrationDTO shootingRangeRegistrationDTO) {
+        ShootingRange shootingRange = ShootingRangeMapper.INSTANCE.ShootingRangeRegistrationDtoToShootingRange(shootingRangeRegistrationDTO);
+        shootingRangeService.saveShootingRange(shootingRange, shootingRangeRegistrationDTO.getId_club());
     }
 
     @GetMapping("/range")

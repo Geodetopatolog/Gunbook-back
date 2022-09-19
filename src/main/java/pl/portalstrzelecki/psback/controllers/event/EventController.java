@@ -26,7 +26,7 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createEvent(@RequestBody EventRegistrationDTO eventRegistrationDTO) {
         System.out.println(eventRegistrationDTO);
-        eventService.saveEvent(EventMapper.INSTANCE.EventRegostrationDtoToEvent(eventRegistrationDTO),
+        eventService.saveEvent(EventMapper.INSTANCE.EventRegistrationDtoToEvent(eventRegistrationDTO),
                 eventRegistrationDTO.getRangeName(),
                 eventRegistrationDTO.getId_club());
     }

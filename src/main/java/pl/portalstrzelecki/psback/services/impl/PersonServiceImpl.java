@@ -113,7 +113,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override //funkcja stworzona dla porządku, pewnie ją kiedyś wywalę
     public boolean leaveJoinedClub(Long id_person, Long id_club) {
-        return clubService.deleteClubMember(id_person, id_club);
+        return clubService.deleteClubMember(id_club, id_person);
     }
 
     @Override

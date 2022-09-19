@@ -10,6 +10,7 @@ import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.PersonService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -63,12 +64,13 @@ public class PersonEventsController {
     public List<Long> getEventsRequestsIds(@RequestParam Long id_person) {
         List<Long> eventsRequestsIds = personService.getEventsRequestsIds(id_person);
 
-        if (!eventsRequestsIds.isEmpty()) {
+//        if (!eventsRequestsIds.isEmpty()) {
             return eventsRequestsIds;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+////            throw new ResponseStatusException(
+////                    HttpStatus.NOT_FOUND, "entity not found");
+//            return new ArrayList<>();
+//        }
     }
 
 
@@ -121,12 +123,13 @@ public class PersonEventsController {
     public List<Long> getJoinedEventsIds(@RequestParam Long id_person) {
         List<Long> joinedEventsIds = personService.getJoinedEventsIds(id_person);
 
-        if (!joinedEventsIds.isEmpty()) {
+//        if (!joinedEventsIds.isEmpty()) {
             return joinedEventsIds;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+////            throw new ResponseStatusException(
+////                    HttpStatus.NOT_FOUND, "entity not found");
+//            return new ArrayList<>();
+//        }
     }
 
 

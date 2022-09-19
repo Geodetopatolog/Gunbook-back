@@ -14,6 +14,9 @@ public class PSbackApplication {
 
 
 }
+
+//todo przerobić endpointy na zwracanie pustych tablic przy braku np członków klubu itp
+
 //todo TESTY TESTY TESTY! :P
 
 //todo zdecydować się na nazewnictwo typu request, application itp :)

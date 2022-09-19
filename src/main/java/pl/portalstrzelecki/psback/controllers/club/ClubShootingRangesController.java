@@ -15,6 +15,7 @@ import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ClubShootingRangesController {

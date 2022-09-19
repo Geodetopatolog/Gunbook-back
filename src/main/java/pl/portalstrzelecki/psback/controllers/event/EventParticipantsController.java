@@ -13,6 +13,7 @@ import pl.portalstrzelecki.psback.services.EventService;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class EventParticipantsController {

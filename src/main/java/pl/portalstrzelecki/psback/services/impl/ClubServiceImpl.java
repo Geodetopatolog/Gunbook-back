@@ -115,7 +115,7 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public boolean acceptMembershipRequest(Long id_club, Long id_person) {
         if (addClubMember(id_club, id_person)) {
-            deleteMembershipRequest(id_person, id_club);
+            deleteMembershipRequest(id_club, id_person);
             return true;
         } else {
             return false;

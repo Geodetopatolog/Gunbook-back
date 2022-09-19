@@ -51,12 +51,12 @@ public class PersonClubsController {
 
         List<Long> joinedClubsIds = personService.getJoinedClubsIds(id_person);
 
-        if (!joinedClubsIds.isEmpty()) {
+//        if (!joinedClubsIds.isEmpty()) {
             return joinedClubsIds;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 
@@ -108,12 +108,12 @@ public class PersonClubsController {
 
         List<Long> appliedClubsIds = personService.getAppliedClubsIds(id_person);
 
-        if (!appliedClubsIds.isEmpty()) {
+//        if (!appliedClubsIds.isEmpty()) {
             return appliedClubsIds;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 
@@ -166,12 +166,12 @@ public class PersonClubsController {
     {
         List<Long> ownedClubsIds = personService.getOwnedClubsIds(id_person);
 
-        if (!ownedClubsIds.isEmpty()) {
+//        if (!ownedClubsIds.isEmpty()) {
             return ownedClubsIds;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 }

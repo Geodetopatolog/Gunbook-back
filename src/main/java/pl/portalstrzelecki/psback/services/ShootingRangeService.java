@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface ShootingRangeService {
 
     void saveShootingRange(ShootingRange shootingRange);
+    boolean saveShootingRange(ShootingRange shootingRange, Long id_club);
     boolean deleteShootingRange(Long id);
     boolean updateShootingRange(ShootingRange shootingRange);
     Optional<ShootingRange> getShootingRangeById(long id);

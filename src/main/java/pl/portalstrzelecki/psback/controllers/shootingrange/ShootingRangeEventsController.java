@@ -12,6 +12,7 @@ import pl.portalstrzelecki.psback.services.ShootingRangeService;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ShootingRangeEventsController {

@@ -11,7 +11,7 @@ import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class ClubEventsController {
