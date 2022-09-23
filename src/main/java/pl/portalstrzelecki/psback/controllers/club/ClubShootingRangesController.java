@@ -1,15 +1,10 @@
 package pl.portalstrzelecki.psback.controllers.club;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import pl.portalstrzelecki.psback.domain.event.Event;
 import pl.portalstrzelecki.psback.domain.shootingrange.ShootingRange;
-import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.shootingRange.ShootingRangeDTO;
-import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ShootingRangeMapper;
 import pl.portalstrzelecki.psback.services.ClubService;
 
@@ -26,13 +21,13 @@ public class ClubShootingRangesController {
     public List<ShootingRangeDTO> getClubRanges(@RequestParam Long id_club) {
 
         List<ShootingRange> clubRanges = clubService.getClubRanges(id_club);
-
-        if (!clubRanges.isEmpty()) {
+//
+//        if (!clubRanges.isEmpty()) {
             return ShootingRangeMapper.INSTANCE.ShootingRangesToShootingRangeDtos(clubRanges);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
     @PatchMapping("/club/ranges")

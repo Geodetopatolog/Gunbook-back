@@ -1,10 +1,8 @@
 package pl.portalstrzelecki.psback.controllers.event;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.club.Club;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.club.ClubDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.ClubMapper;
@@ -25,12 +23,12 @@ public class EventOrganizersController {
 
         List<Club> eventOrganizers = eventService.getEventOrganizers(id_event);
 
-        if (!eventOrganizers.isEmpty()) {
+//        if (!eventOrganizers.isEmpty()) {
             return ClubMapper.INSTANCE.ClubToClubDtos(eventOrganizers);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
 
     }
 

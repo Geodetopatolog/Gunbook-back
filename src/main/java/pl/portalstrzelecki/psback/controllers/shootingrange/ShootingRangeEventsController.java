@@ -24,12 +24,12 @@ public class ShootingRangeEventsController {
     public List<EventDTO> getRangeEvents(@RequestParam Long id_range) {
         List<Event> rangeEvents = shootingRangeService.getRangeEvents(id_range);
 
-        if (!rangeEvents.isEmpty()) {
+//        if (!rangeEvents.isEmpty()) {
             return EventMapper.INSTANCE.EventsToEventDtos(rangeEvents);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 

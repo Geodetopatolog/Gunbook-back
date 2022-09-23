@@ -1,9 +1,11 @@
 package pl.portalstrzelecki.psback.dtoandmappers.dto.person;
 
+import lombok.Builder;
 import lombok.Data;
 
 
 @Data
+@Builder
 public class PersonRegistrationDTO {
 
     private Long id_person;

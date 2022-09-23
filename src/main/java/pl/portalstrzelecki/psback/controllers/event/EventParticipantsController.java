@@ -1,10 +1,8 @@
 package pl.portalstrzelecki.psback.controllers.event;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.PersonMapper;
@@ -26,12 +24,12 @@ public class EventParticipantsController {
 
         List<Person> eventParticipantsRequests = eventService.getParticipantsRequests(id_event);
 
-        if (!eventParticipantsRequests.isEmpty()) {
+//        if (!eventParticipantsRequests.isEmpty()) {
             return PersonMapper.INSTANCE.PersonsToPersonDtos(eventParticipantsRequests);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
     @PatchMapping("/event/participants/requests")
@@ -75,13 +73,13 @@ public class EventParticipantsController {
     public List<PersonDTO> getEventParticipants(@RequestParam Long id_event) {
 
         List<Person> eventParticipants = eventService.getEventParticipants(id_event);
-
-        if (!eventParticipants.isEmpty()) {
+//
+//        if (!eventParticipants.isEmpty()) {
             return PersonMapper.INSTANCE.PersonsToPersonDtos(eventParticipants);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 //    @PatchMapping("/event/participants")

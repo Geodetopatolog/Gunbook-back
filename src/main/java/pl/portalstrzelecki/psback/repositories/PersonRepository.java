@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
     @Query("select p from Person p where p.name = 'Rafał'")
-    public List<Person> getPersonWithNameEqualsRafal();
+    List<Person> getPersonWithNameEqualsRafal();
 
     @Query("select p from Person p where p.name = :queryName")
-    public List<Person> getPersonWithNameEquals(@Param("queryName") String name);
+    List<Person> getPersonWithNameEquals(@Param("queryName") String name);
 
 }

@@ -10,7 +10,6 @@ import pl.portalstrzelecki.psback.dtoandmappers.dto.event.EventDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.mappers.EventMapper;
 import pl.portalstrzelecki.psback.services.PersonService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -24,12 +23,12 @@ public class PersonEventsController {
     public List<EventDTO> getEventsRequests(@RequestParam Long id_person) {
         List<Event> eventsRequests = personService.getEventsRequests(id_person);
 
-        if (!eventsRequests.isEmpty()) {
+//        if (!eventsRequests.isEmpty()) {
             return EventMapper.INSTANCE.EventsToEventDtos(eventsRequests);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
     @PatchMapping("/person/joined_events/requests")

@@ -25,12 +25,12 @@ public class ShootingRangeClubsController {
 
         List<Club> rangeClubs = shootingRangeService.getRangeClubs(id_range);
 
-        if (!rangeClubs.isEmpty()) {
+//        if (!rangeClubs.isEmpty()) {
             return ClubMapper.INSTANCE.ClubToClubDtos(rangeClubs);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
 
     }
 

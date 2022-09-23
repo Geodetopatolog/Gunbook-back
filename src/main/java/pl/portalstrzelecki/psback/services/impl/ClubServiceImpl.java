@@ -164,7 +164,7 @@ public class ClubServiceImpl implements ClubService {
                 clubRepository.save(club);
                 return true;
             } else {
-                return true;
+                return false;
             }
 
         } else {

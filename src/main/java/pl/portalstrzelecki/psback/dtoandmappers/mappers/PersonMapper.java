@@ -18,6 +18,7 @@ public interface PersonMapper {
 
     @Mapping(target = "clubs", ignore = true)
     @Mapping(target = "eventsJoined", ignore = true)
+    @Mapping(target = "eventsRequests", ignore = true)
     @Mapping(target = "ownedClubs", ignore = true)
     @Mapping(target = "userData", ignore = true)
     @Mapping(target = "clubsApplications", ignore = true)

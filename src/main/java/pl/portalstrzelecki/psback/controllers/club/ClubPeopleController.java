@@ -1,10 +1,8 @@
 package pl.portalstrzelecki.psback.controllers.club;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonBasicDataDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
@@ -26,12 +24,12 @@ public class ClubPeopleController {
 
         List<Person> clubMembersRequests = clubService.getMembershipRequests(id_club);
 
-        if (!clubMembersRequests.isEmpty()) {
+//        if (!clubMembersRequests.isEmpty()) {
             return PersonMapper.INSTANCE.PersonsToPersonBasicDataDtos(clubMembersRequests);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
     @PatchMapping("/club/members/requests")
@@ -73,12 +71,12 @@ public class ClubPeopleController {
 
         List<Person> clubMembers = clubService.getClubMembers(id_club);
 
-        if (!clubMembers.isEmpty()) {
+//        if (!clubMembers.isEmpty()) {
             return PersonMapper.INSTANCE.PersonsToPersonDtos(clubMembers);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 //    @PatchMapping("/club/members")
@@ -117,12 +115,12 @@ public class ClubPeopleController {
 
         List<Person> clubOwners = clubService.getClubOwners(id_club);
 
-        if (!clubOwners.isEmpty()) {
+//        if (!clubOwners.isEmpty()) {
             return PersonMapper.INSTANCE.PersonsToPersonDtos(clubOwners);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
     @PatchMapping("/club/owners")

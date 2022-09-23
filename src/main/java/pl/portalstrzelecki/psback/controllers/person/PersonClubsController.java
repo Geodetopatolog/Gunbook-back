@@ -24,12 +24,12 @@ public class PersonClubsController {
 
         List<Club> joinedClubs = personService.getJoinedClubs(id_person);
 
-        if (!joinedClubs.isEmpty()) {
+//        if (!joinedClubs.isEmpty()) {
             return ClubMapper.INSTANCE.ClubToClubDtos(joinedClubs);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
     @DeleteMapping("person/clubs")
@@ -65,13 +65,13 @@ public class PersonClubsController {
     public List<ClubDTO> getMembershipRequests(@RequestParam Long id_person) {
 
         List<Club> membershipRequests = personService.getJoinedClubsRequests(id_person);
-
-        if (!membershipRequests.isEmpty()) {
+//
+//        if (!membershipRequests.isEmpty()) {
             return ClubMapper.INSTANCE.ClubToClubDtos(membershipRequests);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-        }
+//        } else {
+//            throw new ResponseStatusException(
+//                    HttpStatus.NOT_FOUND, "entity not found");
+//        }
     }
 
 
