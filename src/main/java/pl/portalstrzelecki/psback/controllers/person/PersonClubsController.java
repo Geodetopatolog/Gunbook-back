@@ -12,7 +12,7 @@ import pl.portalstrzelecki.psback.services.PersonService;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "${cors.origin}", allowCredentials = "true")
 @RestController
 @RequiredArgsConstructor
 public class PersonClubsController {

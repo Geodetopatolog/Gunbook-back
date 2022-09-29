@@ -55,10 +55,7 @@ class AuthenticationControllerIT {
         ResponseEntity<AuthenticationResponse> response = restTemplate.exchange(request, AuthenticationResponse.class);
 
         //then
-
         assertTrue(response.getStatusCode().is2xxSuccessful());
-        assertNotNull(response.getBody().getJwt());
-
     }
 
 

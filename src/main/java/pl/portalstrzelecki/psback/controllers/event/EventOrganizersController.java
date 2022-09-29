@@ -10,7 +10,7 @@ import pl.portalstrzelecki.psback.services.EventService;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "${cors.origin}", allowCredentials = "true")
 @RestController
 @RequiredArgsConstructor
 public class EventOrganizersController {

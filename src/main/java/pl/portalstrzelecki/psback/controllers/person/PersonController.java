@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.portalstrzelecki.psback.domain.authentication.AuthenticationResponse;
+import pl.portalstrzelecki.psback.domain.authentication.UserData;
 import pl.portalstrzelecki.psback.domain.person.Person;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonBasicDataDTO;
 import pl.portalstrzelecki.psback.dtoandmappers.dto.person.PersonDTO;
@@ -16,7 +18,7 @@ import pl.portalstrzelecki.psback.services.PersonService;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
+@CrossOrigin(origins = "${cors.origin}", allowCredentials = "true")
 @RestController
 @RequiredArgsConstructor
 public class PersonController {
@@ -78,10 +80,48 @@ public class PersonController {
 
             return PersonMapper.INSTANCE.PersonsToPersonDtos(personService.getAllPersons());
     }
+
     @GetMapping("/person/all/basic")
     public @ResponseBody List<PersonBasicDataDTO> getAllPersonBasicData() {
 
             return PersonMapper.INSTANCE.PersonsToPersonBasicDataDtos(personService.getAllPersons());
+    }
+
+    @GetMapping("/person/basic")
+    public @ResponseBody AuthenticationResponse getLoggedPersonBasicData(@RequestParam Long id_person){
+
+
+        Optional<Person> optionalPerson = personService.getPersonById(id_person);
+
+        if (optionalPerson.isPresent()) {
+            Person person = optionalPerson.get();
+
+            UserData userData = person.getUserData();
+
+            String role;
+            if (userData.isGod()){
+                role = "GOD";
+            } else if (userData.isAdmin()) {
+                role = "ADMIN";
+            } else {
+                role = "USER";
+            }
+
+            return AuthenticationResponse.builder()
+                    .loggedUserId(person.getId_person())
+                    .role(role)
+                    .loggedUserClubsIds(person.getClubsIds())
+                    .loggedUserOwnedClubsIds(person.getOwnedClubsIds())
+                    .loggedUserJoinedEventsIds(person.getJoinedEventsIds())
+                    .loggedUserAppliedClubsIds(person.getAppliedClubsIds())
+                    .loggedUserAppliedEventsIds(person.getRequestEventsIds())
+                    .build();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Nie znaleziono encji");
+        }
+
+
     }
 
 

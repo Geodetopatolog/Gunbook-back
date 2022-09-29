@@ -9,9 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -23,28 +26,42 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        final String authorizationHeader = request.getHeader("Authorization");
+//        final String authorizationHeader = request.getHeader("Authorization");
+//
+//        if (request.getCookies()!=null){
+//            Optional<Cookie> authorizationHeaderCookie = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("Authorization")).findAny();
+//
+//            if (authorizationHeaderCookie.isPresent()) {
+//                String authorizationHeader2 = authorizationHeaderCookie.get().getValue();
+//                System.out.println(authorizationHeader2);
+//            }
+//        }
 
-        String username = null;
-        String jwt = null;
+//        String username = null;
+//        String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
-        }
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//            jwt = authorizationHeader.substring(7);
+//            username = jwtUtil.extractUsername(jwt);
+//        }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        if (request.getCookies()!=null && Arrays.stream(request.getCookies()).anyMatch(cookie -> cookie.getName().equals("Authorization"))){
+            String jwt = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("Authorization")).findAny().get().getValue();
+            String username = jwtUtil.extractUsername(jwt);
 
-            if (jwtUtil.validateToken(jwt, userDetails)) {
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                if (jwtUtil.validateToken(jwt, userDetails)) {
 
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    usernamePasswordAuthenticationToken
+                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
             }
         }
         chain.doFilter(request, response);

@@ -26,26 +26,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //todo ogarnac cala konfiguracje
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .cors()
-//                .and().authorizeRequests()
-//                .antMatchers("/authenticate").permitAll()
-//                .antMatchers("/person_clubs").permitAll()
-//                .antMatchers("/person_joinedevents").permitAll()
-//                .antMatchers("/person").hasAuthority("USER")
-//                .anyRequest().authenticated()
-//                .and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 
         http.csrf().disable()
                 .cors()
                 .and().authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
-                .antMatchers("/person").hasAuthority("USER")
-                .antMatchers("/person/all").hasAuthority("USER")
-                .antMatchers("/person/all/basic").hasAuthority("USER")
+                .antMatchers("/person/**").hasAuthority("USER")
+                .antMatchers("/club/all").permitAll()
+                .antMatchers("/club/**").hasAuthority("USER")
+                .antMatchers("/event/all").permitAll()
+                .antMatchers("/event/**").hasAuthority("USER")
+                .antMatchers("/range/all").permitAll()
+                .antMatchers("/range/**").hasAuthority("USER")
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.requiresChannel()
+                .antMatchers("/**").requiresSecure();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

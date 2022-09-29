@@ -26,7 +26,7 @@ import java.util.List;
 @TestPropertySource("/persistence-generic-entity.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PersonControllerIT {
-
+//todo ogarnąć te testy po zmianie działania tokena
 //stary token eyJhbGciOiJIUzI1NiJ9.eyJpZCI6Miwic3ViIjoidXNlciIsImlhdCI6MTY2MzkzMDk5MywiZXhwIjoxNjYzOTM4MTkzfQ.3nSc06wRyMeP2aE1H2TGuYUeCikm8-1L9-oGWtxU0qw
     @LocalServerPort
     private int serverPort;
