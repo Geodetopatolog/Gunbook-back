@@ -37,15 +37,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and().sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+//        http.csrf().disable()
+//                .cors()
+//                .and().authorizeRequests()
+//                .antMatchers("/authenticate").permitAll()
+//                .antMatchers("/person").hasAuthority("USER")
+//                .antMatchers("/person/all").hasAuthority("USER")
+//                .antMatchers("/person/all/basic").hasAuthority("USER")
+//                .and().sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
         http.csrf().disable()
                 .cors()
                 .and().authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
-                .antMatchers("/person").hasAuthority("USER")
-                .antMatchers("/person/all").hasAuthority("USER")
-                .antMatchers("/person/all/basic").hasAuthority("USER")
+                .antMatchers("/person/**").hasAuthority("USER")
+                .antMatchers("/club/all").permitAll()
+                .antMatchers("/club/**").hasAuthority("USER")
+                .antMatchers("/event/all").permitAll()
+                .antMatchers("/event/**").hasAuthority("USER")
+                .antMatchers("/range/all").permitAll()
+                .antMatchers("/range/**").hasAuthority("USER")
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -21,7 +21,7 @@ import pl.portalstrzelecki.psback.services.UserService;
 
 import java.util.*;
 
-@CrossOrigin
+@CrossOrigin(origins = "${cors.origin}", allowCredentials = "true")
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
